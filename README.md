@@ -620,11 +620,7 @@ Si eres responsable de una de estas fuentes y quieres que ajuste la atribución,
 # NEXUS_Osint_X · OSINT Command Center
 # AGPLv3, Copyright (C) 2026  Condor2026 
 
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU Affero General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-# ...
+· Licencia: GNU AGPLv3 (ver LICENSE). El código es 100 % del autor; no se aceptan PRs.
 
 
 ## 💤 Nota final
