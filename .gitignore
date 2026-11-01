@@ -1,37 +1,73 @@
-# ─── Secretos (NUNCA subir) ───
+# ═══════════════════════════════════════════════════════════════════════
+# Nexus_Osint_X · Command Center v3.1 — .gitignore
+# ───────────────────────────────────────────────────────────────────────
+# Regla: NUNCA subir secretos, bases de datos, cachés ni datos personales.
+# ═══════════════════════════════════════════════════════════════════════
+
+# ── Secretos y configuración local ─────────────────────────────────────
 .env
 .env.*
 !.env.example
-*.pem
-*.key
+.nexus_jwt_secret
 
-# ─── Base de datos y estado persistente ───
+# ── Base de datos y estado de SQLite ───────────────────────────────────
 nexus.db
 nexus.db-wal
 nexus.db-shm
-*.db
-*.db-journal
+nexus.db-journal
+nexus.db.lock
 *.sqlite
 *.sqlite3
 
-# ─── Caché de NEXUS ───
+# ── Cachés y runtime ───────────────────────────────────────────────────
 .cache/
-.cache/**
-*.cache
+*.log
+nexus.log
+*.pid
+*.tmp
+*.temp
 
-# ─── GeoLite2 (licencia MaxMind, requiere cuenta propia) ───
+# ── Geolocalización (MaxMind exige que no se redistribuya) ─────────────
 GeoLite2-City.mmdb
-GeoLite2-*.mmdb
+GeoLite2-Country.mmdb
+GeoLite2-ASN.mmdb
 
-# ─── Python ───
+# ── Intel / datos que no deben publicarse ──────────────────────────────
+# (carpeta de Andrómeda con grupo_<slug>.txt, listas locales, etc.)
+intel/
+feeds/
+lists/
+*.txt
+!requirements.txt
+!LICENSE
+!README.md
+!CONTRIBUTING.md
+!SECURITY.md
+!.gitignore
+!.env.example
+
+# ── Exportaciones y paquetes generados ─────────────────────────────────
+exports/
+*.csv
+*.json
+*.ndjson
+*.geojson
+*.kml
+*.xlsx
+*.zip
+!package.json
+!package-lock.json
+!tsconfig.json
+
+# ── Python ─────────────────────────────────────────────────────────────
 __pycache__/
 *.py[cod]
 *$py.class
 *.so
 .Python
 build/
-dist/
 develop-eggs/
+dist/
 downloads/
 eggs/
 .eggs/
@@ -41,28 +77,32 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
 MANIFEST
+
+# ── Entornos virtuales ─────────────────────────────────────────────────
 .venv/
 venv/
-ENV/
 env/
+ENV/
+.conda/
+.python-version
 
-# ─── Tests / cobertura ───
+# ── Herramientas de testing / cobertura ────────────────────────────────
 .pytest_cache/
 .coverage
 .coverage.*
 htmlcov/
 .tox/
 .nox/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
 
-# ─── Logs ───
-*.log
-logs/
-
-# ─── IDEs / SO ───
+# ── IDEs y editores ────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
@@ -71,17 +111,20 @@ logs/
 .DS_Store
 Thumbs.db
 desktop.ini
+*.sublime-workspace
+*.sublime-project
 
-# ─── Exportaciones temporales ───
-nexus_events_*.csv
-nexus_report_*.md
-*.geojson
-*.kml
-!examples/*.geojson
-
-# ─── Jupyter ───
+# ── Jupyter (por si alguien analiza los datos) ─────────────────────────
 .ipynb_checkpoints/
 
-# ─── Ruff / mypy ───
-.ruff_cache/
-.mypy_cache/
+# ── Terraform / Docker / despliegue local ──────────────────────────────
+terraform.tfstate*
+docker-compose.override.yml
+Dockerfile.local
+
+# ── Datos temporales del sistema ───────────────────────────────────────
+*.bak
+*.orig
+*.rej
+*.patch.tmp
+*~
