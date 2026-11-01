@@ -274,6 +274,7 @@ Nexus_Osint_X es **OSINT: observación de lo que pasa**, no planificación de lo
 Este es un **prototipo** y **no ha pasado una auditoría formal**. Aun así, se han aplicado las mitigaciones razonables con el tiempo disponible:
 
 - **Escucha en loopback por defecto** (`127.0.0.1`). No se puede poner `0.0.0.0` por error: hay que definirlo a propósito en `NEXUS_HOST` o editar el `.py`.
+- **`NEXUS_HOST=0.0.0.0` NO es seguro por sí solo.** Expone el panel a cualquier IP que pueda llegar a la máquina. Si lo usas, es obligatorio poner algo delante: un proxy inverso con TLS y autenticación (Nginx, Caddy), una VPN (Tailscale, WireGuard) o un firewall que bloquee el puerto salvo desde tu IP. Y en ese caso, `NEXUS_LOCAL_NOAUTH=0` y una `ADMIN_PASSWORD` fuerte.
 - **`ADMIN_PASSWORD` por defecto (`admin123`) avisa en el log.** Cámbialo en `.env` antes de usar. Con la de por defecto, **solo se acepta desde 127.0.0.1 y sin cabeceras de proxy** (`X-Forwarded-For`, `X-Real-IP`, `Forwarded`).
 - **`JWT_SECRET` autogenerado** si no se define (se guarda en `.nexus_jwt_secret` con permisos 0600 para que las sesiones sobrevivan a reinicios). Si el disco es de solo lectura, cae a un secreto aleatorio por arranque.
 - **Bypass de loopback** (`NEXUS_LOCAL_NOAUTH=1`) valida `Host`, `Origin`, `Sec-Fetch-Site` y rechaza `X-Forwarded-For`/`Via`/`X-Forwarded-Host`. No se puede saltar con un proxy mal configurado si lo pones a `0` en producción.
