@@ -2,7 +2,7 @@
 
 ![TheCondor](NEXSUSX.jpg)
 
-> **Radar OSINT autohospedado**: ~110 fuentes públicas, globo 3D con deck.gl, correlación entre dominios, MITRE ATT&CK, panel J.A.R.V.I.S, detector de denuncias en canales públicos de Telegram y bot de Telegram (⚠️ sin probar). Todo en un único `nexus.py` ejecutable con `python nexus.py` o `uvicorn`.
+> **Radar OSINT autohospedado**: más de 330 entradas de fuentes públicas (RSS, APIs, listas de IPs, canales públicos de Telegram), globo 3D con deck.gl, satélites, correlación entre dominios, MITRE ATT&CK, panel J.A.R.V.I.S, detector de denuncias y bot de Telegram (⚠️ sin probar). **Es un prototipo y puede dar falsos positivos: léelo como una pista, no como una prueba.** Todo en un único `nexus.py` ejecutable con `python nexus.py` o `uvicorn`.
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -13,16 +13,17 @@
 [![JWT](https://img.shields.io/badge/JWT-auth-000000?logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
 [![deck.gl](https://img.shields.io/badge/deck.gl-9.0-00D4FF?logo=uber&logoColor=white)](https://deck.gl/)
 [![Chart.js](https://img.shields.io/badge/Chart.js-4.4-FF6384?logo=chartdotjs&logoColor=white)](https://www.chartjs.org/)
-[![pandas](https://img.shields.io/badge/pandas-2.1-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
+[![pandas](https://img.shields.io/badge/pandas-2.x%20%7C%203.x-150458?logo=pandas&logoColor=white)](https://pandas.pydata.org/)
 [![NumPy](https://img.shields.io/badge/NumPy-1.26-013243?logo=numpy&logoColor=white)](https://numpy.org/)
 [![httpx](https://img.shields.io/badge/httpx-async-2E5E8C)](https://www.python-httpx.org/)
 [![APScheduler](https://img.shields.io/badge/APScheduler-3.10-6C3483)](https://apscheduler.readthedocs.io/)
 [![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK-FF0000?logo=mitre&logoColor=white)](https://attack.mitre.org/)
-[![OSINT](https://img.shields.io/badge/OSINT-110%2B%20sources-00D4FF)](https://en.wikipedia.org/wiki/Open-source_intelligence)
+[![OSINT](https://img.shields.io/badge/OSINT-330%2B%20source%20entries-00D4FF)](https://en.wikipedia.org/wiki/Open-source_intelligence)
 [![CTI](https://img.shields.io/badge/CTI-threat%20intel-8B5CF6)](https://en.wikipedia.org/wiki/Cyber_threat_intelligence)
 [![Defensive](https://img.shields.io/badge/use-defensive-00FF9F)](https://github.com/Condor2026/Nexus_Osint_X)
 [![Self-hosted](https://img.shields.io/badge/self--hosted-yes-FFBE0B)](https://github.com/Condor2026/Nexus_Osint_X)
-[![Prototype](https://img.shields.io/badge/status-prototype-orange)](https://github.com/Condor2026/Nexus_Osint_X)
+[![Prototype](https://img.shields.io/badge/status-prototype-orange)](#-estado-del-proyecto-prototipo)
+[![False positives](https://img.shields.io/badge/ojo-puede%20dar%20falsos%20positivos-red)](#-falsos-positivos-y-limitaciones)
 [![License](https://img.shields.io/badge/License-AGPL%20v3-blue?logo=opensourceinitiative&logoColor=white)](./LICENSE)
 [![Contributions](https://img.shields.io/badge/contributions-ideas%20only-blueviolet)](./CONTRIBUTING.md)
 [![Last commit](https://img.shields.io/github/last-commit/Condor2026/Nexus_Osint_X?color=00D4FF&label=last%20commit)](https://github.com/Condor2026/Nexus_Osint_X/commits/main)
@@ -32,6 +33,7 @@
 [![Issues](https://img.shields.io/github/issues/Condor2026/Nexus_Osint_X?color=FF005C)](https://github.com/Condor2026/Nexus_Osint_X/issues)
 
 **Topics:** `osint` · `threat-intelligence` · `cybersecurity` · `dashboard` · `deck-gl` · `mitre-attack` · `cti` · `defensive-security` · `fastapi` · `python` · `globe` · `3d-visualization` · `sqlite` · `ioc` · `threat-hunting` · `security-tools` · `open-source-intelligence` · `cyber-threat-intelligence` · `self-hosted`
+
 
 ---
 
@@ -44,6 +46,8 @@
 - Los nombres de grupos son **públicos y documentados** por CERTs y prensa (Killnet, NoName057(16), Lazarus, APT28…). No son acusaciones privadas.
 - Si eres titular de una IP listada y crees que es un error, abre un issue y se revisa.
 - **Este es un prototipo.** No todas las partes están igual de maduras (ver "Estado del proyecto"). Lo que no funciona, se irá arreglando.
+- **Puede dar falsos positivos (y falsos negativos).** Una alerta, un punto en el mapa, una correlación o la IP de un grupo son **pistas automáticas**, no hechos confirmados. Lee la sección [Falsos positivos y limitaciones](#-falsos-positivos-y-limitaciones) antes de fiarte de cualquier dato.
+- **No tomes decisiones graves (legales, laborales, de seguridad física o de represalia) basándote solo en lo que muestra Nexus_Osint_X.** Contrasta siempre con la fuente original (cada evento lleva su enlace).
 
 ### Lo que Nexus_Osint_X NO hace
 
@@ -52,65 +56,124 @@
 - ❌ No contacta con C2 ni con infraestructura maliciosa.
 - ❌ No envía tráfico a los indicadores que muestra (las URLs van defangeadas: `hxxp://ejemplo[.]com`).
 - ❌ No simula ataques ni genera escenarios hipotéticos.
-- ❌ No predice el futuro.
+- ❌ No predice el futuro (la «tendencia» de JARVIS es una extrapolación lineal simple del intervalo anterior, no una predicción fiable).
 - ❌ No reemplaza a un SOC, un CTI o un analista humano.
 - ❌ No verifica independientemente las atribuciones: refleja lo que dice la fuente.
 
 **Nexus_Osint_X es un radar, no un simulador.** Si buscas un war-game o un generador de escenarios, esta no es tu herramienta.
 
----
 
 ## 🚧 Estado del proyecto: prototipo
 
 Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios disponibles. **Hice todo lo que pude** con lo que tenía, priorizando que el núcleo (recolección, mapa, correlación, export) funcionara antes que los extras.
 
+**Qué significa «prototipo» aquí, sin adornos:**
+
+- Está pensado para **investigar, aprender y como radar de apoyo**, no como sistema de producción ni como fuente única de verdad.
+- **No se ha probado contra todos los endpoints reales** a la vez: muchas fuentes se han desarrollado contra respuestas de ejemplo y pueden fallar, cambiar de formato o bloquearte desde tu red/IP. Por eso hay circuit breaker, fallbacks y la pestaña **🩺 Fuentes**.
+- El **render 3D del globo con mapas base (teselas)** depende de tu navegador/GPU y de la versión de deck.gl que cargue desde CDN. Puede haber artefactos visuales según el equipo. Si algo se ve raro, prueba la vista **Plano** o cambia el mapa base.
+- No hay suite de tests automatizados completa ni auditoría de seguridad formal.
+- Es un **único archivo** (`nexus.py`, ~15 000 líneas) por decisión de diseño: fácil de copiar y ejecutar, incómodo de mantener. Es lo que hay.
+
 | Componente | Estado | Notas |
 |---|---|---|
-| Recolección de fuentes (~110) | ✅ Funciona | Barrido automático (15 min por defecto) + carril rápido de prensa (4 min) + carril rápido de denuncias (5 min). Fuentes lentas (GDELT crimen ≥40 s) siguen en segundo plano y se incorporan al terminar |
-| Globo 3D / mapa plano (deck.gl) | ✅ Funciona | Instancia única en la página, sin iframe, sin recrear WebGL al filtrar. Fallback 2D con Canvas si no hay WebGL/deck.gl |
-| Correlación, anomalías, ATT&CK | ✅ Funciona | Scoring ponderado + decaimiento temporal + entidades compartidas |
-| Panel JARVIS | ✅ Funciona | Índice de amenaza, radar ATT&CK, timeline, KPIs, temáticas, cripto, buscador de IP |
+| Recolección de fuentes (>330 entradas, ~200 de prensa) | ✅ Funciona (con matices) | Barrido automático (15 min por defecto) + carril rápido de prensa (4 min) + carril rápido de denuncias (5 min). **Algunas fuentes fallan según red/IP/cuota** (ver 🩺 Fuentes). Fuentes lentas (GDELT) siguen en segundo plano y se incorporan al terminar |
+| Globo 3D / mapa plano (deck.gl) | ✅ Funciona | Instancia única en la página, sin iframe. Mapas base sin clave en 3D y plano. Fallback 2D con Canvas si no hay WebGL/deck.gl. **Visual 3D con teselas poco probado en hardware variado** |
+| Satélites (órbitas) | 🟡 En pruebas | Posiciones calculadas a partir de TLE públicos; precisión de kilómetros, no para navegación ni seguimiento operativo |
+| Correlación, anomalías, ATT&CK | ✅ Funciona | Scoring ponderado + decaimiento temporal + entidades compartidas. **Las correlaciones son coincidencias, no causas** |
+| Panel JARVIS | ✅ Funciona | Índice de amenaza, radar ATT&CK, KPIs, salud de fuentes, correlaciones en vivo, tendencia, movimiento militar, comparar con antes, fichas, resumen en texto, alarmas con sonido, buscador de IP, cripto |
 | Export (12 formatos) | ✅ Funciona | CSV, JSON, NDJSON, GeoJSON, KML, XLSX, Markdown, HTML, lista de IPs, IPs de grupos (CSV/JSON), ZIP |
-| Detector de denuncias (Telegram + RSS) | 🟡 En pruebas | Recorre canales públicos `t.me/s/` por tandas rotativas + feeds de seguridad. Puede fallar si Telegram limita (429) o un canal cambia de formato |
-| Monitor DDoS (listas vivas) | 🟡 En pruebas | IPs frescas de listas vivas (Blocklist.de, CI Army, GreenSnow, ET, etc.) + ThreatFox + rangos CIDR de NoName057(16); se guardan solo las que coinciden con un grupo, con retención |
+| Detector de denuncias (Telegram + RSS) | 🟡 En pruebas | Lectura **pasiva** de canales públicos `t.me/s/` (sin login, sin cuenta). Puede fallar si Telegram limita (429), si un canal cambia de formato o si no tiene vista web pública |
+| Monitor DDoS (listas vivas) | 🟡 En pruebas | IPs frescas de listas vivas + ThreatFox + rangos CIDR de NoName057(16); solo se guardan las que coinciden con un grupo, con retención |
 | **Bot de Telegram** | ⚠️ **Sin probar** | **No se sabe si funciona.** El código está, pero no se ha ejecutado de principio a fin. **Se arreglará otro día.** |
 | LLM (resumen) | 🟡 Opcional | Requiere `OPENAI_API_KEY`; sin ella, devuelve "no disponible" |
 | War-gaming / simulación | ❌ No existe | No está previsto (ver Filosofía) |
 
-**Sobre el bot de Telegram:** el código está escrito, pero **no se ha probado**. No sé si arranca, si los comandos responden o si el polling falla. **No lo uses como canal de alertas en producción.** Cuando tenga tiempo, lo probaré y lo arreglaré. Mientras tanto, el resto del sistema funciona sin él: si no defines `TELEGRAM_BOT_TOKEN`, el bot simplemente no arranca y todo lo demás sigue igual.
+**Sobre el bot de Telegram:** el código está escrito, pero **no se ha probado**. No sé si arranca, si los comandos responden o si el polling falla. **No lo uses como canal de alertas en producción.** Mientras tanto, el resto del sistema funciona sin él: si no defines `TELEGRAM_BOT_TOKEN`, el bot simplemente no arranca y todo lo demás sigue igual.
 
-**Sobre las vulnerabilidades:** hice lo que pude con lo que sé. Las mitigaciones aplicadas están en la sección "Seguridad" de abajo. No es una auditoría formal; si encuentras algo, abre un issue o un aviso privado (ver `SECURITY.md`).
+**Sobre las vulnerabilidades:** hice lo que pude con lo que sé. Las mitigaciones aplicadas están en la sección "Seguridad" de abajo. No es una auditoría formal; si encuentras algo, abre un aviso privado (ver `SECURITY.md`).
+
+---
+
+## 🎯 Falsos positivos y limitaciones
+
+**Nexus_Osint_X puede equivocarse.** Agrega y clasifica texto público de forma automática; no entiende el contexto como una persona. Trata cada elemento como una **pista que hay que verificar** en la fuente original.
+
+### Por qué aparecen falsos positivos
+
+| Origen | Qué puede pasar |
+|---|---|
+| **Palabras clave** | La severidad, el dominio (terrorismo, crimen, conflicto…), el tipo de ataque y los grupos se deducen por palabras clave. Un titular que *habla de* un atentado (análisis, aniversario, serie, simulacro, opinión) puede clasificarse como si fuera uno nuevo. Ironía, citas y negaciones se interpretan mal. |
+| **Ubicación inferida del texto** | Si el texto nombra un país o ciudad, el punto va ahí, aunque el evento ocurriera en otro sitio (p. ej. «el presidente de X condena el ataque en Y»). Homónimos (ciudades con el mismo nombre) y nombres de medios que contienen un lugar también pueden confundirlo. Las coordenadas de país/ciudad son **centroides aproximados** con un pequeño desplazamiento determinista para no apilar puntos: **no son la dirección real del suceso**. |
+| **Fuentes de solo titular** | Algunas fuentes de prensa llegan por Google News RSS (respaldo cuando el feed directo falla): solo hay titular y enlace, sin cuerpo. Menos contexto → más errores de clasificación. |
+| **Duplicados y ecos** | El dedupe (SimHash) reduce repeticiones, pero la misma noticia en varios medios puede contar varias veces y **inflar** contadores, tendencias y el índice de amenaza. |
+| **Correlaciones** | Agrupa eventos de dominios distintos cercanos en espacio y tiempo (ventana de 360 min por defecto, `NEXUS_CORR_WINDOW_MIN`). **Coincidir no significa estar relacionados.** En ciudades grandes o zonas con mucha prensa saldrán «correlaciones» casuales. La ficha indica si comparten algo real (IP/CVE) o solo lugar y hora. |
+| **IPs de grupos** | Las listas públicas (y los mensajes de Telegram) mezclan **atacantes, víctimas, proxies, nodos Tor/VPN, IPs compartidas y reutilizadas**. Que una IP aparezca asociada a un grupo **no prueba** que sea suya ni que ahora lo siga siendo (las IPs cambian de dueño). Por eso las no verificadas se marcan como «reportada». |
+| **Atribuciones a grupos** | Es lo que dice la fuente (prensa, canal de Telegram, CERT). Los grupos hacktivistas **exageran y mienten** a menudo, y la prensa repite sin verificar. No es una conclusión forense. |
+| **Canales de Telegram** | Cualquiera puede publicar cualquier cosa. Los canales pueden reclamar ataques que no hicieron, reciclar imágenes o publicar propaganda. |
+| **Satélites** | Posición calculada de TLE públicos: error de kilómetros y más con TLE viejos. Sin propietario/país fiable en el TLE. Un nombre parecido no implica función militar. |
+| **Aviones y barcos «militares»** | La etiqueta «militar» sale de listas y heurísticas públicas (hex ICAO, nombres, categoría). Puede haber civiles marcados como militares y militares sin marcar; muchos aparatos **no emiten** o lo hacen con retraso. |
+| **Tendencia / «próximo intervalo»** | Es una recta ajustada a unos pocos intervalos recientes. Sirve para ver hacia dónde apunta la curva, no para anticipar nada. |
+| **Comparaciones («vs. antes»)** | Si cambian las fuentes disponibles (caídas, bloqueos, circuit breaker abierto), el contador baja o sube **sin que el mundo haya cambiado**. Mira **🩺 Salud de fuentes** antes de interpretar una bajada. |
+| **Datos antiguos o incompletos** | Eventos viejos conservan el formato/descripcion con el que se guardaron. Los barridos pueden quedarse a medias si una fuente tarda. |
+
+### Falsos negativos (lo que NO ves)
+
+- Eventos **sin país/ciudad reconocible** en el texto se descartan del mapa (no se inventan coordenadas).
+- Fuentes caídas, bloqueadas, sin clave o con cuota agotada **no aportan nada**: la ausencia de alertas **no significa que no pase nada**.
+- Cobertura desigual: más fuentes en inglés/español/europeas que en otras regiones e idiomas.
+- Lo que no se publica abiertamente (inteligencia privada, redes cerradas, canales de Telegram sin vista web pública) **no aparece**.
+
+### Qué hacer para reducir errores
+
+1. **Abre siempre el enlace original** del evento y léelo antes de concluir nada.
+2. **Cruza** con al menos otra fuente independiente.
+3. Revisa **🩺 Fuentes** (qué está caído, qué falta clave) antes de interpretar una subida o bajada.
+4. Usa los **filtros** de dominio/severidad/grupo y el **marcado de falsos positivos** (`/api/fp`) y los **silencios temporales** (`/api/mute`) para limpiar ruido recurrente.
+5. Para una IP concreta usa el **Buscador de IP** y recuerda: salir en una lista **no significa que seas la víctima ni el atacante**; puede ser un dispositivo comprometido, un NAT compartido o una IP reasignada.
+6. **No publiques ni actúes** contra personas u organizaciones por lo que ves aquí sin verificarlo por tu cuenta.
+
+### Limitaciones técnicas conocidas
+
+- Algunas fuentes pueden **fallar o ir lentas según tu red** (bloqueos 403/429, DNS, geoblocking). El sistema degrada solo: reintenta, usa respaldos (p. ej. Google News `site:`) y abre circuit breaker, pero no puede garantizar cobertura.
+- **GDELT** limita las consultas (429); Nexus usa caché, espaciado entre peticiones y pausa tras un 429, así que sus datos llegan con retraso.
+- **Rate limits** de geolocalización (`ip-api.com`, 15 req/min sin `GeoLite2`): las IPs pueden tardar en ubicarse.
+- Las URLs de **CDN** (deck.gl, teselas de mapa) deben ser accesibles desde tu navegador; si no, se usa el mapa 2D de reserva.
+- La ventana de datos y la retención son finitas (`NEXUS_RETENTION_DAYS`).
 
 ---
 
 ## ✨ Qué hace
 
-- **~110 fuentes OSINT** integradas en **Nexus_Osint_X**: ciberataques (DDoS, malware/botnets, fuerza bruta, exploits, ransomware, phishing), MITRE ATT&CK, cibercrimen, crimen mundial/urbano, conflictos, disturbios, naturaleza, salud, economía, sanciones, **FBI Wanted e INTERPOL Red Notices**, **cripto**, **prensa mundial** (BBC, El País, Le Monde, Der Spiegel, Al Jazeera…), búsquedas de disturbios en 6 idiomas.
+- **Más de 330 entradas de fuentes OSINT** (≈200 de prensa mundial; el resto APIs, feeds y listas): ciberataques (DDoS, malware/botnets, fuerza bruta, exploits, ransomware, phishing), MITRE ATT&CK, cibercrimen, crimen mundial/urbano, terrorismo, detenciones, amenazas de bomba, conflictos, disturbios, caídas de servicios, naturaleza, salud, economía, sanciones, **FBI Wanted e INTERPOL Red Notices**, **cripto**, **prensa mundial** y búsquedas de disturbios en varios idiomas.
 - **Globo 3D y plano** con `deck.gl` en la propia página (sin iframe) + red neuronal animada de fondo.
+- **Mapas base sin clave**: Carto (oscuro / claro / voyager) y Esri (gris oscuro / satélite), tanto en el plano como sobre el globo 3D. Sin teselas, esfera oscura de reserva.
+- **Satélites**: capa de satélites con órbita y **ficha** por satélite (a partir de TLE públicos).
 - **Arcos reales** atacante→víctima solo cuando ambos extremos son conocidos (Cloudflare Radar, noticias atribuidas, feeds de grupos). Sin dos extremos, no hay arco.
-- **Modos temáticos** (todo / ciber / crimen / conflicto / naturaleza-salud / economía / cripto / prensa), ranking de riesgo por país y buscador de IOC.
+- **Fichas** de eventos, aviones, barcos y satélites con enlace a la fuente original.
+- **Modos temáticos**, ranking de riesgo por país y buscador de IOC.
 - **SQLite** con histórico, clustering espacial y retención automática (`NEXUS_RETENTION_DAYS`, 120 días por defecto). La intel de cibercrimen **no se purga nunca** (`NEXUS_KEEP_CYBER=important|all|off`).
 - **Correlación** con scoring ponderado, decaimiento temporal y entidades compartidas.
 - **Detección de anomalías**: z-score por dominio, entidades nuevas, ráfagas CRÍTICA, sentimiento negativo.
 - **Enriquecimiento**: dedupe semántico (SimHash), escalado de severidad, watchlist persistente, tendencias por dominio, búsqueda facetada.
 - **Auth** JWT + HTTP Basic + bypass de loopback (`NEXUS_LOCAL_NOAUTH=1` por defecto, solo desde 127.0.0.1 sin proxy y con validación de `Host`/`Origin`/`Sec-Fetch-Site`).
-- **Circuit breaker** por fuente: 5 fallos seguidos → pausada 5 min.
+- **Circuit breaker** por fuente: 5 fallos seguidos → pausada 5 min. Respaldos automáticos (p. ej. Google News `site:` si un feed RSS directo falla) y cliente GDELT con caché, cabeceras de navegador, espaciado y pausa tras 429.
 - **WebSocket** para actualizaciones en vivo.
-- **Export** en 12 formatos: CSV, JSON, NDJSON, GeoJSON, KML, XLSX, Markdown, HTML, lista de IPs, IPs de grupos (CSV/JSON), ZIP.
+- **Export** en 12 formatos.
 - **Bot de Telegram** ⚠️ **sin probar** (ver "Estado del proyecto").
 - **LLM opcional** con 3 prompts y caché (si defines `OPENAI_API_KEY`).
 - **Scheduler** con health monitoring por fuente, retención automática y watchlist persistente.
-- **Nuevo: Detector de denuncias** que recorre canales públicos de Telegram (`t.me/s/…`, solo lectura), feeds de seguridad y el monitor DDoS, y guarda cada detección (aunque no se pueda ubicar en el mapa) en la pestaña «🛰 Detector».
-- **Nuevo: Buscador de IP** en JARVIS: busca una IP en eventos, listas de grupos y detecciones; avisa si es tu IP pública (con `📡 Mi IP pública`).
-- **Nuevo: Criptomonedas** (top 10 por capitalización vía CoinGecko → CoinPaprika) en el panel JARVIS.
-- **Nuevo: Export XLSX** (requiere `openpyxl`) y **ZIP** con paquete completo.
-- **Nuevo: Anti falsos positivos** en el detector: descarta noticias que *hablan* de un grupo (atribuciones, "según investigadores…") y ataques de un grupo a su aliado.
-- **Nuevo: «Eliminar datos»** con modal de confirmación `BORRAR`; **nunca** toca la intel de cibercrimen, IPs de grupos, detecciones, caché de geolocalización, ajustes ni auditoría.
-- **Nuevo: Botón «⏻ Apagar»** que cierra NEXUS y libera el puerto (SIGINT + `os._exit(0)` para no dejar hilos colgados).
-- **Nuevo: Idioma ES/EN** con conmutador (`🌐 ES/EN`), que se guarda en `localStorage`.
-- **Nuevo: Mapa base CARTO** (Oscuro / Claro / Calles) en vista Plano, con atribución © OpenStreetMap · © CARTO. En vista Globo usa el mapa vectorial.
-- **Nuevo: nombres de ciudades** (botón `🏙`, más ciudades al acercar), graticule, arcos reales con `GreatCircleLayer`/`ArcLayer`, `ScatterplotLayer` para IPs de grupos (cuadrado = IP única), correlaciones en magenta, y panel de ficha de evento con enlace al original.
-- **Nuevo: Circuit breaker + watchlist + «detector» + monitor DDoS** en el mismo proceso, sin cargar meses de intel ni saturar la máquina.
+- **Detector de denuncias** que recorre canales públicos de Telegram (`t.me/s/…`, **solo lectura pasiva, sin login**), feeds de seguridad y el monitor DDoS, y guarda cada detección (aunque no se pueda ubicar) en la pestaña «🛰 Detector».
+- **Buscador de IP** en JARVIS: busca una IP en eventos, listas de grupos y detecciones; avisa si es tu IP pública (`📡 Mi IP pública`).
+- **Criptomonedas** (top 10 vía CoinGecko → CoinPaprika) en JARVIS.
+- **Alarmas con sonido opcional** (🔔) para eventos críticos nuevos.
+- **Falsos positivos manejables**: marcar un evento como falso positivo y **silenciar** temporalmente una fuente/grupo/término.
+- **Anti falsos positivos en el detector**: descarta noticias que *hablan* de un grupo (atribuciones, «según investigadores…») y ataques de un grupo a su aliado. *Reduce* el ruido; no lo elimina.
+- **Claves en el código (`CLAVES`)**: si no usas `.env`, puedes pegar tus claves en el diccionario `CLAVES` al principio de `nexus.py`.
+- **«Eliminar datos»** con modal de confirmación `BORRAR`; **nunca** toca la intel de cibercrimen, IPs de grupos, detecciones, caché de geolocalización, ajustes ni auditoría.
+- **Botón «⏻ Apagar»** que cierra NEXUS y libera el puerto.
+- **Idioma ES/EN** (`🌐 ES/EN`), guardado en `localStorage`.
+- **Nombres de ciudades** (`🏙`), graticule, arcos con `GreatCircleLayer`/`ArcLayer`, `ScatterplotLayer` para IPs de grupos (cuadrado = IP única), correlaciones en magenta y ficha de evento con enlace al original.
 
 ---
 
@@ -131,9 +194,11 @@ cd Nexus_Osint_X
 python -m venv .venv
 source .venv/bin/activate          # Windows: .venv\Scripts\activate
 pip install -r requirements.txt
+# (compatible con pandas 2.x y 3.x)
 
 cp .env.example .env
 # Edita .env: como mínimo cambia ADMIN_PASSWORD y genera JWT_SECRET
+# (alternativa sin .env: pega tus claves en el diccionario CLAVES al inicio de nexus.py)
 ```
 
 Genera un `JWT_SECRET` fuerte:
@@ -159,6 +224,8 @@ El primer barrido arranca solo en segundo plano (retrasado ~8 s para que el pane
 
 ## 🔑 Fuentes y claves
 
+**Dos formas de poner las claves:** en `.env`, o directamente en el diccionario `CLAVES` al inicio de `nexus.py` (lo que pongas ahí se carga al arrancar y tiene el mismo efecto que una variable de entorno). Si usas `CLAVES`, **no subas ese archivo a un repositorio público con tus claves dentro**.
+
 Todas las claves son **opcionales**: sin ellas, la fuente simplemente devuelve 0 eventos y el resto del sistema sigue funcionando. En la pestaña **🩺 Fuentes** se marca con 🔑 la fuente que necesita clave.
 
 | Fuente | Clave necesaria | Dónde obtenerla |
@@ -175,6 +242,10 @@ Todas las claves son **opcionales**: sin ellas, la fuente simplemente devuelve 0
 | ReliefWeb | `RELIEFWEB_APPNAME` | https://apidoc.reliefweb.int/ |
 | OpenSanctions | `OPENSANCTIONS_API_KEY` | https://www.opensanctions.org/api/ |
 | Ransomware.live | `RANSOMWARE_LIVE_KEY` | https://www.ransomware.live/ |
+| Reddit | `REDDIT_CLIENT_ID` / `REDDIT_CLIENT_SECRET` | https://www.reddit.com/prefs/apps |
+| OpenAQ | `OPENAQ_API_KEY` | https://openaq.org/ |
+| OpenWeather | `OPENWEATHER_API_KEY` | https://openweathermap.org/api |
+| UCDP | `UCDP_ACCESS_TOKEN` | https://ucdp.uu.se/ |
 | Telegram (⚠️ sin probar) | `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID` | @BotFather · @userinfobot |
 | LLM | `OPENAI_API_KEY` | https://platform.openai.com/api-keys |
 | Canales de Telegram del detector (opcional) | `NEXUS_TG_CHANNELS` (lista separada por comas, se añaden a los ~600 de Andrómeda) | — |
@@ -182,7 +253,7 @@ Todas las claves son **opcionales**: sin ellas, la fuente simplemente devuelve 0
 
 Las fuentes sin clave (Feodo, CISA KEV, SANS ISC, Blocklist.de, ET Compromised, Spamhaus DROP, SSLBL, OpenPhish, RSS de seguridad, GDELT, USGS, EONET, NOAA, WHO, OFAC, FBI Wanted, INTERPOL Red Notices, portales de crimen urbano, cripto —CoinGecko/CoinPaprika—, prensa, etc.) funcionan **desde el primer minuto**.
 
-### Variables de entorno más relevantes
+### Variables de entorno
 
 | Variable | Por defecto | Para qué |
 |---|---|---|
@@ -190,25 +261,40 @@ Las fuentes sin clave (Feodo, CISA KEV, SANS ISC, Blocklist.de, ET Compromised, 
 | `JWT_SECRET` | autogenerado y guardado en `.nexus_jwt_secret` (0600) | Firma JWT; con valor fijo sobrevive a reinicios |
 | `NEXUS_HOST` / `NEXUS_PORT` | `127.0.0.1` / `8000` | Escucha |
 | `NEXUS_LOCAL_NOAUTH` | `1` | Bypass de loopback para el dashboard (`0` = exige login siempre) |
-| `NEXUS_SWEEP_MINUTES` | `15` | Intervalo del barrido completo (se puede cambiar en la barra: manual / 3 / 5 / 15 min / 1 h / 1 día) |
+| `NEXUS_WS_OPEN` | — | `1` = el WebSocket no comprueba origen/credenciales (comportamiento antiguo) |
+| `NEXUS_SWEEP_MINUTES` | `15` | Intervalo del barrido completo (cambiable en la barra: manual / 3 / 5 / 15 min / 1 h / 1 día) |
 | `NEXUS_NEWS_MINUTES` | `4` | Carril rápido de prensa |
 | `NEXUS_GROUPS_MINUTES` | `5` | Carril rápido del detector de denuncias |
+| `NEXUS_WAR_MINUTES` | `8` | Carril de conflicto/guerra |
 | `NEXUS_RETENTION_DAYS` | `120` | Retención de eventos/correlaciones/anomalías/auditoría (0 = nunca) |
 | `NEXUS_KEEP_CYBER` | `important` | Qué intel de cibercrimen se conserva siempre (`important`/`all`/`off`) |
+| `NEXUS_SOURCE_CONCURRENCY` | `32` | Fuentes simultáneas del barrido completo |
+| `NEXUS_CORR_WINDOW_MIN` | `360` | Ventana temporal de correlación (minutos) |
+| `NEXUS_MAP_POINTS` | `6000` | Máx. puntos en el mapa |
+| `NEXUS_MAP_CORR` | `100` | Máx. correlaciones en el mapa |
+| `NEXUS_SHIP_KEEP_HOURS` | `48` | Horas que se conservan los barcos |
+| `NEXUS_AIS_BOXES` | zonas calientes de serie | Tus zonas AIS: `lat1,lon1,lat2,lon2;lat1,lon1,lat2,lon2` (requiere `AISSTREAM_API_KEY`) |
+| `NEXUS_AIS_SECONDS` | `20` | Segundos que se escucha AIS por barrido |
 | `NEXUS_GROUP_IP_KEEP_DAYS` | `30` | Días que se guarda una IP de grupo sin volver a verla (0 = nunca) |
 | `NEXUS_GROUP_IP_CAP` | `1500` | Máx. IPs por grupo |
+| `NEXUS_GROUP_IP_MAX` | `1000` | Máx. IPs por feed/fichero (acota geolocalización y memoria) |
+| `NEXUS_GROUP_IP_DIR` | — | Carpeta local de IPs de grupos (`grupo_<slug>.txt`) |
 | `NEXUS_GROUP_FRESH_HOURS` | `72` | «Fresca» = vista en vivo en las últimas N horas |
-| `NEXUS_GROUP_SEEDS` | `0` | `1` = añade las IPs fijas de Andrómeda (no frescas) |
+| `NEXUS_GROUP_SEEDS` | `0` | `1` = añade las IPs fijas de la lista semilla (no frescas) |
 | `NEXUS_TG_OFF` | — | `1` = desactiva el detector de Telegram |
+| `NEXUS_TG_CHANNELS` / `NEXUS_WAR_TG_CHANNELS` | — | Canales públicos extra (coma) para el detector / el carril de conflicto |
+| `NEXUS_TG_DISCOVER` | `1` | Descubrimiento de canales |
 | `NEXUS_TG_MINUTES` | `10` | Intervalo mínimo por canal |
 | `NEXUS_TG_MAX_AGE_H` | `72` | Edad máxima de un mensaje de Telegram |
-| `NEXUS_TG_PER_RUN` | `60` | Canales por tanda (rotan; ~600 canales ≈ 10 pasadas) |
+| `NEXUS_TG_PER_RUN` | `60` | Canales por tanda (rotan) |
+| `NEXUS_TG_ALERTS` | `critical` | Qué alertas manda el bot (⚠️ bot sin probar) |
+| `NEXUS_TG_MAX_PER_HOUR` | `6` | Tope de mensajes por hora del bot |
 | `NEXUS_DDOS_MON_MINUTES` | `15` | Cada cuánto corre el monitor DDoS |
 | `NEXUS_DDOS_MON_GEO` | `600` | Máx. IPs coincidentes que geolocaliza por pasada |
-| `NEXUS_SOURCE_CONCURRENCY` | `32` | Fuentes simultáneas del barrido completo |
-| `NEXUS_MAP_POINTS` | `1500` | Máx. puntos en el mapa |
+| `NEXUS_ARC_TARGET` | `38.9072,-77.0369` | Destino por defecto de arcos ilustrativos |
+| `NEXUS_ARC_MIN_SRC` | `0` | Permite también arcos con N fuentes distintas (0 = solo flujos con dato real) |
+| `NEXUS_ECO` | `0` (off) | `1` = modo ECO: sin ningún panel abierto, los barridos se espacian (rápidos 30 min, completo 60 min) |
 | `NEXUS_DECK_URL` / `NEXUS_LAND_URL` | CDN | deck.gl / Natural Earth locales si quieres servir sin CDN |
-| `NEXUS_ARC_TARGET` | `38.9072,-77.0369` | Destino por defecto si activas arcos ilustrativos |
 | `NEXUS_CONTACT` | `nexus-osint@localhost` | Contacto en el User-Agent fijo de Wikipedia |
 
 ---
@@ -216,7 +302,7 @@ Las fuentes sin clave (Feodo, CISA KEV, SANS ISC, Blocklist.de, ET Compromised, 
 ## 🗺️ Qué significa cada cosa en el mapa
 
 ### Puntos
-Cada punto es **un evento real** con `source`, `url` y `timestamp` verificables.
+Cada punto es **un evento publicado por una fuente** con `source`, `url` y `timestamp` verificables. Que el evento esté publicado no garantiza que esté bien clasificado ni bien ubicado (ver «Falsos positivos»).
 - **Tamaño**: severidad + relevancia (CRÍTICA > ALTA > MEDIA > BAJA).
 - **Color**: dominio del evento (ver leyenda abajo a la izquierda; clic para filtrar).
 - **Halo magenta**: evento CRÍTICA (se dibuja aparte para que no se pierda).
@@ -233,7 +319,7 @@ Si no hay dos extremos conocidos, **no hay arco**. Una IP maliciosa suelta no ti
 El selector **"Solo flujos reales"** (por defecto) garantiza que solo ves arcos con dato real. Si eliges otro destino (Washington, Londres, Bruselas, Madrid, Berlín, Moscú, Pekín, Tokio, Tel Aviv, Kyiv, São Paulo, Ciudad de México, mi ubicación o centro de la vista), los arcos adicionales son **ilustrativos** (tú eliges el punto), y la interfaz lo indica.
 
 ### Correlaciones (círculos magenta)
-Agrupaciones de eventos de **dominios distintos** que coinciden en espacio (<5°) y tiempo (<60 min), con entidades compartidas. El `score` se muestra en el tooltip. No son predicciones: son **coincidencias observadas**. Al hacer clic se abre una ficha que explica **de qué hablan** ambos lados, con un veredicto: ✅ vínculo real (comparten IP/CVE), ⚠ vínculo débil (solo comparten país/tema) o ⚠ sin nada en común salvo lugar y hora.
+Agrupaciones de eventos de **dominios distintos** que coinciden en espacio (<5°) y tiempo (ventana de 360 min por defecto, `NEXUS_CORR_WINDOW_MIN`), con entidades compartidas. El `score` se muestra en el tooltip. No son predicciones: son **coincidencias observadas**. Al hacer clic se abre una ficha que explica **de qué hablan** ambos lados, con un veredicto (**orientativo**, ver «Falsos positivos»): ✅ vínculo real (comparten IP/CVE), ⚠ vínculo débil (solo comparten país/tema) o ⚠ sin nada en común salvo lugar y hora.
 
 ### IPs de grupos (cuadrados)
 IPs atribuidas a grupos (Killnet, NoName057(16), DarkStorm, APT28, Lazarus, ransomware…) por **feeds públicos** (GovCERT.ch, SecurityScorecard), **canales públicos de Telegram**, **prensa** o tu **carpeta local de Andrómeda**. El registro es **temporal** (no meses): las IPs caducan a los `NEXUS_GROUP_IP_KEEP_DAYS` días si no se vuelven a ver.
@@ -242,8 +328,14 @@ IPs atribuidas a grupos (Killnet, NoName057(16), DarkStorm, APT28, Lazarus, rans
 - **Borde blanco discontinuo**: IP "reportada" (no verificada, puede ser víctima).
 - **Colores por tipo**: hacktivista (naranja), APT (rosa), ransomware (violeta), botnet (verde).
 
+### Satélites
+Capa opcional de satélites (grupos de TLE públicos): punto con su órbita y ficha (nombre, altitud, velocidad, etc.). **Posición aproximada**, calculada a partir de elementos orbitales públicos; no sirve para seguimiento operativo.
+
+### Mapas base
+Carto (oscuro / claro / voyager) y Esri (gris oscuro / satélite), sin clave, en **Plano** y en **Globo**. Atribución © OpenStreetMap · © CARTO · Esri. Las teselas llegan hasta ±85° de latitud; los polos los cubre la esfera oscura.
+
 ### Lo que NO se dibuja
-- Eventos sin país/ciudad reconocible en el texto → se descartan (no se inventan coordenadas).
+- Eventos sin país/ciudad reconocible en el texto → se descartan (no se inventan coordenadas). Los que sí se dibujan usan **ubicación aproximada** (centroide de país/ciudad), no la dirección exacta.
 - Conflictos, crimen, naturaleza, economía, cripto → **no dibujan arcos** (solo ciberataques).
 - Escenarios hipotéticos, predicciones, "qué pasaría si" → **no existen en Nexus_Osint_X**.
 
@@ -271,6 +363,7 @@ Nexus_Osint_X es **OSINT: observación de lo que pasa**, no planificación de lo
 
 ---
 
+
 ## 🔒 Seguridad (lo que se ha mitigado)
 
 Este es un **prototipo** y **no ha pasado una auditoría formal**. Aun así, se han aplicado las mitigaciones razonables con el tiempo disponible:
@@ -287,12 +380,14 @@ Este es un **prototipo** y **no ha pasado una auditoría formal**. Aun así, se 
 - **URLs de malware defangeadas**: no hay clic accidental a C2 desde el panel.
 - **Sin ejecución de código remoto**: los datos externos se tratan como texto.
 - **CSRF/DNS-rebinding**: el bypass de loopback exige `Host` loopback y `Origin` igual a `Host` (si hay `Origin`) y `Sec-Fetch-Site` same-origin/none.
+- **Claves en el código (`CLAVES`)**: cómodo, pero no compartas ni publiques `nexus.py` con tus claves dentro.
 - **`.gitignore`** excluye `.env`, `*.db`, `.cache/`, `intel/`, `GeoLite2-City.mmdb`, `.nexus_jwt_secret`.
 - **Sin salida a los indicadores**: OpenPhish se resuelve por DNS (nunca se visita la URL); las URLs de malware se muestran defangeadas y el enlace apunta a la ficha de URLhaus; los enlaces de IOC apuntan a servicios externos (VirusTotal, AbuseIPDB…), pero NEXUS no les envía nada por ti.
 
 **Si encuentras una vulnerabilidad**, abre un aviso privado (ver `SECURITY.md`). **No abras un issue público con detalles explotables.**
 
 ---
+
 
 ## 📐 Cómo se puntúa
 
@@ -313,15 +408,12 @@ Resultado: `CRITICA` (≥4.5) · `ALTA` (≥3.0) · `MEDIA` (≥1.8) · `BAJA` (
 `compute_correlations()` combina:
 - **Peso de dominio** (`WEIGHTS`: ciberataque=3, conflicto=3, ransomware=3, terremoto=2…).
 - **Proximidad espacial** (distancia <5°).
-- **Decaimiento temporal** (ventana de 60 min).
+- **Decaimiento temporal** (ventana de 360 min por defecto).
 - **Entidades compartidas** (bonus hasta +1.0).
-- **Score final Tienes razón. Continúo **exactamente** desde `Score final`, sin reiniciar nada.
-
----
 
 **Score final = peso × (1 + 3 × proximidad) × (0.5 + 0.5 × temporal) × (1 + bonus)**
 
-Solo se guardan correlaciones con `score ≥ 5`.
+Solo se guardan correlaciones con `score ≥ 5`. **Es una heurística de coincidencia, no una prueba de relación.**
 
 ### Índice de amenaza (JARVIS)
 `100 × (1 − exp(−carga_ponderada/hora / 80))`. Saturación suave: 0 = calma, 100 = saturación. Se compara siempre contra la **ventana anterior de igual tamaño**. Niveles: `BAJO` (<25), `MODERADO` (25-49), `ALTO` (50-74), `CRÍTICO` (≥75).
@@ -331,7 +423,7 @@ Solo se guardan correlaciones con `score ≥ 5`.
 
 ### Detecciones del detector de denuncias
 Cada mensaje/noticia que menciona un grupo o amenaza se guarda como detección (aunque no tenga ubicación), con:
-- **Tipo de ataque** (`ddos`, `ransomware`, `phishing`, `bruteforce`, `malware`, `botnet`, `escaneo`, `filtración`, `exploit`, `infraestructura_critica`, `gobierno`, `militar`, `hackeo`, `ataque`) por palabras clave.
+- **Tipo de ataque** (`ddos`, `ransomware`, `phishing`, `bruteforce`, `malware`, `botnet`, `escaneo`, `filtración`, `exploit`, `infraestructura_critica`, `gobierno`, `militar`, `hackeo`, `ataque`) **por palabras clave: puede equivocarse**.
 - **Salud / energía** (🏥 / ⚡ en la pestaña Detector).
 - **IPs citadas** (se geolocalizan y se guardan en el registro temporal de IPs del grupo; marcadas como «no verificadas: puede ser víctima»).
 - **Víctimas** (países citados por banderas, ccTLD de dominios o nombres de país; se excluyen aliados del grupo).
@@ -380,13 +472,22 @@ Overlay de análisis global (`j` o botón **JARVIS**), con ventana propia (1 h /
 - **Grupos activos** (eventos + IPs frescas; clic → mapa filtrado por ese grupo).
 - **Secciones temáticas** (Terrorismo, Revueltas callejeras, Crimen urbano, Cripto): total, delta vs. ventana anterior, severidades, países con más actividad y últimos eventos clicables.
 - **Criptomonedas · top 10** por capitalización (CoinGecko → CoinPaprika), con precio, cambio 24 h, 1 h y 7 d; se actualiza cada 30 s (caché 2 min).
+- **🩺 Salud de fuentes**: cuántas están OK / caídas / pausadas por el circuit breaker, y las que fallan. Úsala para saber si una bajada es real o es que se cayó una fuente.
+- **Correlaciones en vivo**: las más recientes con su score; clic → ficha/mapa.
+- **Tendencia por familia**: pendiente de los últimos intervalos y «próx.» (extrapolación lineal **simple**, no una predicción).
+- **Movimiento militar**: aviones y barcos marcados como militares (etiquetado heurístico, ver «Falsos positivos»).
+- **Comparar con antes**: ahora vs. intervalo anterior vs. misma franja hace una semana.
+- **Resumen en texto**: lectura automática de la situación (generada por reglas, no por un analista).
+- **Fichas** de avión / barco / satélite con enlace y datos disponibles.
+- **Alarmas** con sonido opcional (🔔).
 - **Alertas recientes** (solo CRÍTICA/ALTA, con fuente y título).
 - **Buscador de IP** (ver arriba) con enlaces a eventos en el mapa.
 - **Paneles temáticos de la ventana** (Ciber, Naturaleza, Economía, Conflicto, Crimen): área apilada por dominio + indicadores + chips.
 
----
 
 ## 🔌 API
+
+> Lista resumida de las rutas principales (hay ~75 en total; las `/partial/*` son internas del dashboard).
 
 | Método | Ruta | Descripción |
 |---|---|---|
@@ -427,13 +528,24 @@ Overlay de análisis global (`j` o botón **JARVIS**), con ventana propia (1 h /
 | `GET` | `/api/artifacts` | URLs, hashes, IPs y CVEs extraídos de un texto |
 | `GET` | `/export/{fmt}` | Exportaciones (12 formatos + `zip`) |
 | `POST` | `/api/shutdown` | Apagar NEXUS y liberar el puerto |
+| `GET` | `/api/alarms` | Alarmas recientes (`hours`) |
+| `GET` | `/api/sats` | Satélites por grupos (`groups`, hasta 6) |
+| `GET` | `/api/timeline` | Línea de tiempo por país (`country`, `hours`) |
+| `GET` | `/api/heat` | Matriz de actividad (`hours`) |
+| `GET` | `/api/war/radar` | Radar de conflicto |
+| `GET` | `/api/report` | Informe (`hours`, `fmt=html/md`, `download`) |
+| `GET` | `/api/ddos/export` | Dossier DDoS (CSV/JSON, `days`, `q`) |
+| `GET` / `POST` | `/api/fp` · `/api/fp/undo` | Listar / marcar / deshacer falsos positivos |
+| `GET` / `POST` | `/api/mutes` · `/api/mute` · `/api/unmute` | Silencios temporales (`kind`, `value`, `hours`) |
+| `GET` | `/api/tg/search` | Buscar un canal público de Telegram |
+| `POST` | `/api/tg/add` · `/api/tg/remove` · `/api/tg/scan` | Añadir / quitar / escanear un canal (detector) |
+| `GET` | `/partial/*` | Fragmentos HTML del dashboard (feed, ticker, fuentes, grupos, detector, etc.) |
 | `WS` | `/ws` | Actualizaciones en vivo (`sweep_start`, `sweep`, `reset`) |
 
 Auth: `Authorization: Bearer <jwt>` o HTTP Basic. Desde `127.0.0.1` sin proxy el dashboard no pide login (`NEXUS_LOCAL_NOAUTH=1`), pero `POST /api/sweep/start`, `/api/circuit/reset`, `/api/admin/reset`, `/api/detector/scan`, `/api/shutdown` y los `watchlist/*` siguen exigiendo `require_user_or_local` (loopback válido o auth).
 
 Formatos de export (`/export/{fmt}`): `csv`, `json`, `ndjson`, `geojson`, `kml`, `markdown`, `html`, `xlsx` (requiere `openpyxl`), `ips`, `grupos_csv`, `grupos_json`, `zip`. Parámetros: `hours`, `domain`, `group`, `severity`, `q`, `limit`, `hist` (para grupos).
 
----
 
 ## 🤖 Bot de Telegram (⚠️ sin probar)
 
@@ -456,7 +568,6 @@ Requiere `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` en `.env`. Si lo pruebas y fa
 
 **Nota:** el bot está en la lista de tareas pendientes. **Hay que descansar.** Se arreglará cuando haya tiempo.
 
----
 
 ## 🧱 Arquitectura
 
@@ -470,7 +581,7 @@ nexus.py
 ├── §4     Geolocalización multi-proveedor (GeoLite2 → ip-api /batch → geojs, caché en disco)
 ├── §5     Texto: sentimiento, países (tabla ISO2 + alias ES/EN), ciudades, entidades, tags
 ├── §5.bis Enriquecimiento: dedupe SimHash, escalado de severidad, watchlist, tendencias, artifacts
-├── §6     Colectores (~110 fuentes, cada una degrada sola; grupos, detector de denuncias, monitor DDoS, prensa, cripto)
+├── §6     Colectores (>330 entradas de fuentes, cada una degrada sola; grupos, detector de denuncias, monitor DDoS, prensa, cripto)
 ├── §7     Correlación (clustering espacial + decaimiento temporal + entidades compartidas)
 ├── §8     Anomalías (z-score por dominio)
 ├── §8.bis Anomalías avanzadas (entidad nueva, ráfaga CRITICA, sentimiento negativo)
@@ -479,7 +590,7 @@ nexus.py
 ├── §11    Exportación
 ├── §12    Orquestación de barrido (serializado, deadline suave, ingestión tardía)
 ├── §13    Payload del mapa (JSON compacto, palette, flujos)
-├── §14    Frontend (HTML/CSS/JS + NeuralNet + deck.gl + JARVIS + mapa base CARTO + i18n ES/EN)
+├── §14    Frontend (HTML/CSS/JS + NeuralNet + deck.gl + JARVIS + mapas base sin clave + satélites + i18n ES/EN)
 └── §15    FastAPI (rutas, parciales, API, WebSocket, lifespan)
 ```
 
@@ -495,7 +606,7 @@ nexus.py
 - **Serialización de escrituras.** `_DB_WRITE_LOCK` + reintento con `busy_timeout` 20 s: el barrido y el detector no se pisan.
 - **Single-instance.** Lock en `nexus.db.lock` (`fcntl.flock`): si otro NEXUS usa la misma BD, avisa en el log con «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!».
 - **Watchdog de event loop.** Si el servidor se bloquea >2 s, lo avisa en el log (así se ve qué lo cuelga: barrido, BD, etc.).
-- **Barrido serializado con deadline suave.** Las fuentes lentas (GDELT crimen ≥40 s por el límite de 1 consulta/5 s) siguen en segundo plano y se incorporan con `_ingest_late` al terminar, sin retrasar el resto.
+- **Barrido serializado con deadline suave.** Las fuentes lentas (GDELT, con su límite de peticiones y caché) siguen en segundo plano y se incorporan con `_ingest_late` al terminar, sin retrasar el resto.
 
 ---
 
@@ -514,9 +625,13 @@ nexus.py
 | `sqlite3.IntegrityError` en eventos | Duplicado por `raw_hash` (normal) | Se ignora silenciosamente; no es un error |
 | La geolocalización va lenta | `ip-api.com` limita a 15 req/min | Sin `GeoLite2-City.mmdb` es normal; añade el `.mmdb` para ir local |
 | El detector de Telegram no avanza | 429 de Telegram (rate limit) | Se reintenta solo; en la pestaña Detector verás «Telegram limitó las peticiones» |
+| Una fuente sale en rojo / «falla» | Bloqueo (403/429), DNS, geoblocking, cambio de formato o cuota | Normal en un prototipo. Mira 🩺 Fuentes; el sistema usa respaldos y reintenta. Si es persistente, ignórala |
+| GDELT va lento o da 429 | Límite de peticiones de GDELT | Es normal: usa caché y pausa; llegará con retraso |
+| Aparece un evento que «no tiene sentido» | Falso positivo (clasificación/ubicación por palabras clave) | Abre el enlace original; márcalo como falso positivo o silencia la fuente/término |
+| Una IP mía sale en una lista | Las listas pueden incluir IPs compartidas, reasignadas o de dispositivos comprometidos | Revisa tu red/dispositivos; no implica que seas el atacante ni la víctima |
+| Triángulos o bandas raras en el globo 3D | Artefactos de teselas/GPU según navegador | Cambia de mapa base, pasa a vista **Plano** o actualiza el navegador; si persiste, abre un issue con captura y nivel de zoom |
 | «Barriendo…» eterno | El barrido tardó más de 90 s (seguro de la UI) | La UI libera sola los controles; si el servidor no responde, mira el log y el watchdog `[RENDIMIENTO]` |
 
----
 
 ## 📁 Estructura del repo
 
@@ -524,7 +639,7 @@ nexus.py
 .
 ├── nexus.py                 # Aplicación completa
 ├── requirements.txt
-├── .env.example
+├── .env.ejemplo / .env.example
 ├── .gitignore
 ├── LICENSE
 ├── README.md
@@ -544,7 +659,7 @@ Nexus_Osint_X agrega **fuentes públicas** (feeds de seguridad, agencias guberna
 
 Los indicadores (IPs, hashes, URLs) se muestran _defangeados_ (`hxxp://ejemplo[.]com`) para evitar clics accidentales.
 
-**Este es un prototipo.** No es un producto terminado. Algunas partes (como el bot de Telegram) **no se han probado**. Úsalo bajo tu responsabilidad y no lo despliegues en producción sin revisarlo antes.
+**Este es un prototipo y puede dar falsos positivos.** No es un producto terminado. Algunas partes (como el bot de Telegram) **no se han probado**. Úsalo bajo tu responsabilidad y no lo despliegues en producción sin revisarlo antes.
 
 ---
 
@@ -605,7 +720,8 @@ Nexus_Osint_X no sería posible sin el trabajo público de estas organizaciones 
 - **deck.gl** — visualización 3D
 - **FastAPI** + **Uvicorn** — backend
 - **Natural Earth** — datos geográficos (países en `ne_110m_admin_0_countries.geojson`)
-- **CARTO** — mapas base (`basemaps.cartocdn.com`), © OpenStreetMap · © CARTO
+- **CARTO** y **Esri** — mapas base (`basemaps.cartocdn.com`, ArcGIS Online), © OpenStreetMap · © CARTO · Esri
+- **CelesTrak** y TLE públicos — órbitas de satélites
 - **Jinja2**, **Chart.js**, **httpx**, **feedparser**, **APScheduler**, **passlib**, **PyJWT**
 - **OpenAI** — LLM opcional
 - **Telegram Bot API**
@@ -619,20 +735,21 @@ Si eres responsable de una de estas fuentes y quieres que ajuste la atribución,
 
 ## 📄 Licencia
 
-# NEXUS_Osint_X · OSINT Command Center
-# AGPLv3, Copyright (C) 2026  Condor2026 
+**NEXUS_Osint_X · OSINT Command Center**
+AGPL-3.0, Copyright (C) 2026 Condor2026
 
-· Licencia: GNU AGPLv3 (ver LICENSE). El código es 100 % del autor; no se aceptan PRs.
+Licencia: GNU AGPLv3 (ver `LICENSE`). El código es 100 % del autor; **no se aceptan PRs** (las ideas y los reportes de errores sí, vía issues).
 
 
 ## 💤 Nota final
 
 Este es un **prototipo** hecho con el tiempo y los medios disponibles. **Hice todo lo que pude** con lo que tenía, priorizando que el núcleo funcionara antes que los extras.
 
-**El bot de Telegram no se ha probado** y **no se sabe si funciona**. **Se arreglará otro día. Hay que descansar.**
+**Puede dar falsos positivos.** Verifica siempre en la fuente original antes de sacar conclusiones o actuar.
 
-Si algo no funciona, abre un issue con el log y la versión. Si algo funciona, disfrútalo. Si algo falla y sabes arreglarlo, manda un PR.
+**El bot de Telegram no se ha probado** y **no se sabe si funciona**. **Se arreglará otro día.**
+
+Si algo no funciona, abre un issue con el log y la versión. Si algo funciona, disfrútalo. Si algo falla y sabes cómo arreglarlo, cuéntalo en un issue (no se aceptan PRs, pero las ideas y los diagnósticos son bienvenidos).
 
 Gracias por pasarte. Deja una estrella si te gustó el proyecto.
-
 - Condor2026
