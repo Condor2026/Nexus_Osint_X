@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 🔐 Security vulnerability
+    url: https://github.com/Condor2026/Nexus_Osint_X/security/policy
+    about: Do NOT open a public issue with exploitable details. See SECURITY.md.
+  - name: 📖 README / documentation
+    url: https://github.com/Condor2026/Nexus_Osint_X#readme
+    about: Check the README (status, false positives, troubleshooting, API) before opening an issue.
+  - name: ♿ Accessibility statement
+    url: https://github.com/Condor2026/Nexus_Osint_X/blob/main/ACCESSIBILITY.md
+    about: Supported environments, known limitations, and how to report barriers.
