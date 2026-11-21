@@ -1,37 +1,37 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# Copyright (C) 2026 
-# Condor2026 ClearWhiteNet
+# Copyright (C) 2026                          Condor2026
 #
 # Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
 # GNU Affero General Public License v3 publicada por la Free Software Foundation.
 # Se distribuye SIN NINGUNA GARANTÍA. Texto completo: https://www.gnu.org/licenses/agpl-3.0.html
+# Nota AGPL §13: si ofreces este programa a otros usuarios por red, debes ofrecerles también su código fuente.
 # Contribuciones: este proyecto NO acepta código externo (ni pull requests). Las ideas y sugerencias son bienvenidas;
 # si una idea se implementa y funciona, se reconoce a su autor.
 """
 ═══════════════════════════════════════════════════════════════════════════
 OSINT COMMAND CENTER v3.1 — "NEXUS"
 ─────────────────────────────────────────────────────────────────────────
-- Más de 330 entradas de fuentes OSINT (≈200 de prensa mundial): ciberataques (DDoS, malware/botnets, fuerza bruta, exploits, ransomware, phishing), MITRE ATT&CK, cibercrimen, crimen mundial/urbano, terrorismo, conflictos, disturbios, naturaleza, economía, cripto…
-- **PROTOTIPO:** puede dar falsos positivos (clasificación y ubicación por palabras clave); cada dato es una pista que hay que verificar en su fuente original
-- Arcos REALES atacante→víctima solo de ciberataques (Cloudflare Radar, noticias atribuidas, feeds de grupos, reivindicaciones)
-- Grupos de amenaza: IPs atribuidas a NoName057(16)/Killnet + reivindicaciones en canales públicos de Telegram (lectura pasiva, sin login) + pestaña «Grupos» y «Detector»
-- Globo 3D / plano con deck.gl (en la propia página, sin iframe) + red neuronal en el fondo; mapas base sin clave (Carto, Esri) y capa de satélites con ficha
-- Aviones y barcos militares: un aparato = un punto (última posición) + estela; fichas con sus datos
-- Panel JARVIS: índice de amenaza, ATT&CK, salud de fuentes, correlaciones en vivo, tendencia, movimiento militar, comparar con antes, resumen en texto, alarmas con sonido, buscador de IP, cripto
-- Modos temáticos, ranking de riesgo por país y buscador de IOC
-- Retención automática de la BD (`NEXUS_RETENTION_DAYS`, 120 días por defecto) y ventanas de hasta 3 meses
-- SQLite con histórico, línea de tiempo y clustering espacial
-- Correlación con scoring ponderado + decaimiento temporal + entidades (son coincidencias, no causas)
-- Detección de anomalías (z-score + entidades nuevas + ráfagas)
-- Análisis de sentimiento y extracción de entidades; dedupe semántico (SimHash), escalado de severidad, watchlist persistente, tendencias por dominio, búsqueda facetada
-- Falsos positivos manejables: marcar y silenciar
-- Auth JWT + HTTP Basic (loopback sin login por defecto) y circuit breaker por fuente con respaldos
-- WebSocket para actualizaciones en vivo
-- Export en 12 formatos: CSV, JSON, NDJSON, GeoJSON, KML, XLSX, Markdown, HTML, lista de IPs, IPs de grupos (CSV/JSON), ZIP
-- Bot de Telegram con 17 comandos e inline keyboards (**SIN PROBAR**)
-- LLM opcional con múltiples prompts y caché
-- Scheduler con health monitoring por fuente
-- Claves opcionales: en `.env` o en el diccionario `CLAVES` de este archivo
+· Más de 330 entradas de fuentes OSINT (≈200 de prensa mundial): ciberataques (DDoS, malware/botnets, fuerza bruta, exploits, ransomware, phishing), MITRE ATT&CK, cibercrimen, crimen mundial/urbano, terrorismo, conflictos, disturbios, naturaleza, economía, cripto…
+· PROTOTIPO: puede dar falsos positivos (clasificación y ubicación por palabras clave); cada dato es una pista que hay que verificar en su fuente original
+· Arcos REALES atacante→víctima solo de ciberataques (Cloudflare Radar, noticias atribuidas, feeds de grupos, reivindicaciones)
+· Grupos de amenaza: IPs atribuidas a NoName057(16)/Killnet + reivindicaciones en canales públicos de Telegram (lectura pasiva, sin login) + pestaña «Grupos» y «Detector»
+· Globo 3D / plano con deck.gl (en la propia página, sin iframe) + red neuronal en el fondo; mapas base sin clave (Carto, Esri) y capa de satélites con ficha
+· Aviones y barcos militares: un aparato = un punto (última posición) + estela; fichas con sus datos
+· Panel JARVIS: índice de amenaza, ATT&CK, salud de fuentes, correlaciones en vivo, tendencia, movimiento militar, comparar con antes, resumen en texto, alarmas con sonido, buscador de IP, cripto
+· Modos temáticos, ranking de riesgo por país y buscador de IOC
+· Retención automática de la BD (NEXUS_RETENTION_DAYS, 120 días por defecto) y ventanas de hasta 3 meses
+· SQLite con histórico, línea de tiempo y clustering espacial
+· Correlación con scoring ponderado + decaimiento temporal + entidades (son coincidencias, no causas)
+· Detección de anomalías (z-score + entidades nuevas + ráfagas)
+· Análisis de sentimiento y extracción de entidades; dedupe semántico (SimHash), escalado de severidad, watchlist persistente, tendencias por dominio, búsqueda facetada
+· Falsos positivos manejables: marcar y silenciar
+· Auth JWT + HTTP Basic (loopback sin login por defecto) y circuit breaker por fuente con respaldos
+· WebSocket para actualizaciones en vivo
+· Export en 12 formatos: CSV, JSON, NDJSON, GeoJSON, KML, XLSX, Markdown, HTML, lista de IPs, IPs de grupos (CSV/JSON), ZIP
+· Bot de Telegram con 17 comandos e inline keyboards (SIN PROBAR)
+· LLM opcional con múltiples prompts y caché
+· Scheduler con health monitoring por fuente
+· Claves opcionales: en .env o en el diccionario CLAVES de este archivo
 ═══════════════════════════════════════════════════════════════════════════
 """
 import unicodedata
@@ -10223,19 +10223,66 @@ function toggleCities(force) {
   renderMap();
 }
 
+const EARTH_TEX = 'https://threejs.org/examples/textures/planets/earth_atmos_2048.jpg';
+function loadPoles() {       // recorta de la textura de Tierra los dos casquetes polares (lat >85,1° y <-85,1°); si no carga, el polo queda del color del mapa
+  if (MAP.poleBM || MAP.poleLoading) return; MAP.poleLoading = true;
+  const im = new Image(); im.crossOrigin = 'anonymous';
+  im.onload = () => {
+    try {
+      const W = im.naturalWidth, H = im.naturalHeight, h = Math.max(2, Math.round((90 - 85.1) / 180 * H));
+      const crop = (sy) => { const c = document.createElement('canvas'); c.width = W; c.height = h; c.getContext('2d').drawImage(im, 0, sy, W, h, 0, 0, W, h); return c; };
+      const n = crop(0), so = crop(H - h);
+      const done = (a, b) => { MAP.poleBM = { n: a, s: b }; renderMap(); };
+      if (window.createImageBitmap) Promise.all([createImageBitmap(n), createImageBitmap(so)]).then(r => done(r[0], r[1])).catch(() => done(n, so)); else done(n, so);
+    } catch (e) { console.warn('polos:', e && e.message); }
+  };
+  im.onerror = () => { MAP.poleLoading = false; };
+  im.src = EARTH_TEX;
+}
+let _poleT = 0;
+function poleFeed(t) {       // cada tesela de la fila superior/inferior aporta su borde (2 píxeles) a una tira de 2048 px; de ahí sale el casquete polar
+  try {
+    const im = t.content, z = t.index.z, y = t.index.y, N = Math.pow(2, z);
+    if (!im || !(im.width > 0) || (y !== 0 && y !== N - 1)) return;
+    if (!MAP.poleStrip || MAP.poleStrip.base !== MAP.base) { const mk = () => { const c = document.createElement('canvas'); c.width = 2048; c.height = 1; return c; }; MAP.poleStrip = { base: MAP.base, n: mk(), s: mk() }; }
+    const bb = t.bbox, x0 = (bb.west + 180) / 360 * 2048, x1 = (bb.east + 180) / 360 * 2048, w = im.width, h = im.height;
+    const north = (y === 0), c = north ? MAP.poleStrip.n : MAP.poleStrip.s;
+    c.getContext('2d').drawImage(im, 0, north ? 0 : h - 2, w, 2, x0, 0, Math.max(1, x1 - x0 + 1), 1);
+    clearTimeout(_poleT); _poleT = setTimeout(poleBuild, 500);
+  } catch (e) {}
+}
+function poleBuild() {
+  try {
+    const P = MAP.poleStrip; if (!P || P.base !== MAP.base) return;
+    const mk = (src) => { const c = document.createElement('canvas'); c.width = 1024; c.height = 64; const g = c.getContext('2d'); try { g.filter = 'blur(3px)'; } catch (e) {} g.drawImage(src, 0, 0, 2048, 1, 0, 0, 1024, 64); return c; };
+    const n = mk(P.n), so = mk(P.s), done = (a, b) => { MAP.poleT = { base: P.base, n: a, s: b }; renderMap(); };
+    if (window.createImageBitmap) Promise.all([createImageBitmap(n), createImageBitmap(so)]).then(r => done(r[0], r[1])).catch(() => done(n, so)); else done(n, so);
+  } catch (e) { console.warn('polos:', e && e.message); }
+}
 function buildLayers() {
   const D = window.deck, L = [], globe = MAP.view === 'globe';
   const sphere = globe, tl0 = globe && tilesOn();
-  // Con teselas la esfera oscura se dibuja PRIMERO y SIN escribir profundidad: las teselas se pintan encima sin «pelearse» con ella (franjas/triángulos),
+  if (tl0) loadPoles();
+  // CON teselas la esfera va 30 km por DEBAJO de la superficie y SÍ escribe profundidad: tapa de polo a polo (y oculta la cara de atrás de la Tierra: así no se ve «a través del planeta») sin pelearse con las teselas (que están en la superficie).
+  // (Antes: esfera oscura PRIMERO y SIN escribir profundidad: las teselas se pintan encima sin «pelearse» con ella (franjas/triángulos),
   // y la esfera sigue tapando los polos (las teselas acaban en ±85°). Con el mapa vectorial no cambia nada.
+  // Las teselas Mercator acaban en ±85,05°: en los polos se ve la propia esfera. Su color sigue al mapa base (esrisat medido en captura; light/voyager aproximados) para que ese círculo se funda con el mar.
+  const SPH_COL = ({ esrisat: [3, 66, 84], light: [212, 218, 220], voyager: [170, 211, 223] })[MAP.base] || [6, 10, 28];
   const SPH_P = !tl0 ? undefined : ((parseInt(D.VERSION || '9', 10) >= 9) ? { depthWriteEnabled: false, depthCompare: 'always' } : { depthMask: false, depthTest: false });
   if (sphere) L.push(new D.SolidPolygonLayer({ id: 'sphere', data: [0],
-    getPolygon: () => [[-180, 90], [0, 90], [180, 90], [180, -90], [0, -90], [-180, -90]],
-    getFillColor: [6, 10, 28], pickable: false, parameters: SPH_P }));
+    getPolygon: () => { const z = tl0 ? -30000 : 0; return [[-180, 90, z], [0, 90, z], [180, 90, z], [180, -90, z], [0, -90, z], [-180, -90, z]]; },
+    getFillColor: tl0 ? SPH_COL : [6, 10, 28], pickable: false, parameters: tl0 ? undefined : SPH_P }));
+  const poleSrc = (MAP.poleT && MAP.poleT.base === MAP.base) ? MAP.poleT : MAP.poleBM;
+  if (tl0 && poleSrc) {       // polo: se prolonga hasta el polo el color del BORDE real de las teselas del mapa elegido (si aún no hay, la foto de Tierra de Andrómeda). Solo el polo que MIRA a la cámara (esta capa no usa profundidad: el otro enseñaría su cara de atrás). Va ANTES de las teselas y las solapa un poco: sin costura
+    const north = ((MAP.vs.globe || {}).latitude || 0) >= 0;
+    L.push(new D.BitmapLayer({ id: north ? 'pole-n' : 'pole-s', image: north ? poleSrc.n : poleSrc.s,
+      bounds: north ? [-180, 84.6, 180, 90] : [-180, -90, 180, -84.6], pickable: false, parameters: SPH_P }));
+  }
   const tiles = tilesOn();
   if (tiles) {
     L.push(new D.TileLayer({ id: 'basemap-' + MAP.base + (globe ? '-g' : ''), data: baseUrls(MAP.base),
       minZoom: 0, maxZoom: globe ? 12 : 19, tileSize: 256, pickable: false, refinementStrategy: 'best-available',
+      onTileLoad: globe ? poleFeed : undefined,
       onTileError: () => { MAP.tileErr = (MAP.tileErr || 0) + 1; if (MAP.tileErr === 8) showToast('⚠ No cargan las teselas del mapa base (¿sin conexión o bloqueadas?). Prueba otro mapa del desplegable o «Vectorial».', 'err'); },
       renderSubLayers: (props) => { const { west, south, east, north } = props.tile.bbox;
         const o = { data: null, image: props.data, bounds: [west, south, east, north], pickable: false };
@@ -10379,7 +10426,8 @@ function createDeck() {
       MAP.vs[MAP.view] = camFields(viewState);
       if (MAP.deck) MAP.deck.setProps({ viewState: camState() });
       const hi = viewState.zoom >= 3.2, ct = cityTier(viewState.zoom), zb = Math.floor(viewState.zoom);
-      if (hi !== MAP.zoomHi || ct !== MAP.cityTier || (MAP.corr && MAP.corr.length > 1 && zb !== MAP.zoomB)) { MAP.zoomHi = hi; MAP.cityTier = ct; MAP.zoomB = zb; renderMap(); }
+      const ps = (viewState.latitude || 0) >= 0 ? 1 : -1, psChg = (MAP.view === 'globe' && ps !== MAP.poleSide); MAP.poleSide = ps;
+      if (psChg || hi !== MAP.zoomHi || ct !== MAP.cityTier || (MAP.corr && MAP.corr.length > 1 && zb !== MAP.zoomB)) { MAP.zoomHi = hi; MAP.cityTier = ct; MAP.zoomB = zb; renderMap(); }
     },
     onInteractionStateChange: (s) => {
       const on = !!(s.isDragging || s.isZooming || s.isPanning || s.isRotating);
