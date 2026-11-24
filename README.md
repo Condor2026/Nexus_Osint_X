@@ -69,6 +69,32 @@ Nexus_Osint_X no está solo. Forma parte de un conjunto de **herramientas indepe
                                                            │  (asistente)  │
                                                            └───────────────┘
 ```
+## 🌉 ¿Cómo funciona el Puente_Nexus?
+
+El **Puente_Nexus** es un proceso independiente que conecta **OsintCiberCrimeX** (buscador) con **Nexus_Osint_X** (radar). **No modifica** ninguno de los dos: los lanza, los vigila y los hace hablar por sus APIs HTTP locales.
+
+### En 4 pasos
+
+1. **Detecta** dónde está cada herramienta (puertos 8765 y 8000; si Nexus está en otro, lo busca).
+2. **Lee IOCs** de OsintCiberCrimeX (`/api/iocs`: IPs, C2, CVE) y los grupos más citados.
+3. **Los copia** a la watchlist de Nexus (`/api/watchlist/add`), que a partir de ahí etiqueta y sube de severidad los eventos del mapa que coincidan.
+4. **Cruza** los eventos recientes de Nexus (`/api/events`, `/api/group_ips`) con los IOCs del buscador y muestra **coincidencias** en su panel (`:8800`).
+
+### Reglas
+
+- **Solo añade lo que él mismo añadió** a la watchlist. Lo que pongas tú a mano, no lo toca.
+- **Todo queda registrado** en `puente_estado.json` y se puede **retirar** desde el panel.
+- **Una coincidencia no es una prueba**: es una pista para que abras el evento en Nexus y el mensaje original en OsintCiberCrimeX.
+- **Funciona solo con stdlib**: no instala nada extra.
+
+### Arranque
+
+```bash
+python Puente_Nexus.py --all     # lanza OsintCiberCrimeX + Nexus + panel del puente (agrega el puerto que te conseja el puente en Osintcrime)
+python Puente_Nexus.py --sync    # una sincronización y sale
+python Puente_Nexus.py --status  # estado de las dos herramientas
+
+```
 
 - **Nexus_Osint_X** funciona **solo**, sin nada más. Es el radar.
 - **OsintCiberCrimeX** funciona **solo**, sin Nexus. Es el buscador.
