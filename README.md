@@ -41,36 +41,41 @@
 
 ## 🧩 Ecosistema Nexus · cada herramienta en su casa
 
-Nexus_Osint_X no está solo. Forma parte de un conjunto de **herramientas independientes**, cada una con su propio repositorio, su propio puerto y su propia base de datos. Puedes usar cualquiera por separado; no necesitan estar todas en marcha a la vez.
+Nexus_Osint_X no está solo. Forma parte de un conjunto de **herramientas independientes**, cada una con su propio repositorio y su propia función. Puedes usar cualquiera por separado; no necesitan estar todas en marcha a la vez.
 
 | Herramienta | Rol | Repositorio | Estado |
 |---|---|---|---|
-| **Nexus_Osint_X** (este repo) | **Base central de mando OSINT**: radar de eventos, mapa 3D, correlación, ATT&CK, panel JARVIS, export | `Condor2026/Nexus_Osint_X` | Prototipo funcional (v3.1) |
-| **OsintCrime** | **Buscador OSINT de crimen**: extrae IOCs (IPs, C2, CVE) y grupos desde canales públicos de Telegram | repositorio propio | En preparación · **dic 2026** |
-| **ThreatJarvisX** | **Asistente IA (JARVIS)** que se comunica con Nexus por su API HTTP local | repositorio propio | Activo |
-| **Puente_Nexus** (en este repo) | **Enlace** entre OsintCrime y Nexus: lanza, vigila y sincroniza ambas por sus APIs locales | `Condor2026/Nexus_Osint_X` | v1.1 funcional |
+| **Nexus_Osint_X** (este repo) | **Radar / base de mando OSINT**: agrega 330+ fuentes, correlaciona, mapa 3D, ATT&CK, panel JARVIS | `Condor2026/Nexus_Osint_X` | Prototipo funcional (v3.1) |
+| **OsintCiberCrimeX** | **Buscador potenciado y específico** de crimen y cyber: índice propio + scraping pasivo + búsqueda especializada | `Condor2026/OsintCiberCrimeX` | v1.15.0 funcional · release ampliada dic 2026 |
+| **ThreatJarvisX** | **Asistente IA** que consulta Nexus por su API | repositorio propio | Activo |
+| **Puente_Nexus** (en este repo) | **Enlace** OsintCiberCrimeX ↔ Nexus: lanza, vigila y sincroniza IOCs | `Condor2026/Nexus_Osint_X` | v1.1 funcional |
+
+**La diferencia importante:**
+
+- **Nexus es un radar**: observa lo que pasa, agrega eventos de 330+ fuentes, correlaciona, dibuja en el mapa. **No busca por ti**; te muestra el panorama.
+- **OsintCiberCrimeX es un buscador**: tú preguntas por un grupo, una IP, un CVE, un canal o un patrón, y él busca en su índice especializado. El scraping es **cómo se alimenta**, no lo que es.
 
 **Cómo encaja todo:**
 
 ```
-┌─────────────────┐        ┌──────────────────┐        ┌─────────────────┐
-│   OsintCrime    │  IOCs  │  Puente_Nexus    │ watch  │  Nexus_Osint_X  │
-│  (buscador TG)  │ ─────► │  (este repo)     │ ─────► │ (mando OSINT)   │
-└─────────────────┘        └──────────────────┘        └─────────────────┘
-                                                              ▲
-                                                              │ API HTTP
-                                                       ┌──────┴───────┐
-                                                       │ ThreatJarvisX │
-                                                       │  (asistente)  │
-                                                       └───────────────┘
+┌───────────────────┐        ┌──────────────────┐        ┌─────────────────┐
+│ OsintCiberCrimeX  │  IOCs  │  Puente_Nexus    │ watch  │  Nexus_Osint_X  │
+│   (buscador)      │ ─────► │  (este repo)     │ ─────► │  (radar/mando)  │
+└───────────────────┘        └──────────────────┘        └─────────────────┘
+                                                                  ▲
+                                                                  │ API HTTP
+                                                           ┌──────┴───────┐
+                                                           │ ThreatJarvisX │
+                                                           │  (asistente)  │
+                                                           └───────────────┘
 ```
 
 - **Nexus_Osint_X** funciona **solo**, sin nada más. Es el radar.
-- **OsintCrime** funciona **solo**, sin Nexus. Es el buscador.
-- **Puente_Nexus** es un *extra* incluido aquí porque es lo que conecta este repo con OsintCrime. Sin el puente, las dos herramientas simplemente no se hablan (lo cual es perfectamente válido).
+- **OsintCiberCrimeX** funciona **solo**, sin Nexus. Es el buscador.
+- **Puente_Nexus** es un *extra* incluido aquí porque es lo que conecta este repo con OsintCiberCrimeX. Sin el puente, las dos herramientas simplemente no se hablan (lo cual es perfectamente válido).
 - **ThreatJarvisX** vive en su propio repo y consulta a Nexus por la API (`/api/kpis`, `/api/analytics`, `/api/crypto`…). No se publica aquí.
 
-> **Este repo solo contiene Nexus_Osint_X + el puente.** OsintCrime y ThreatJarvisX tienen su propio lugar y se publican por separado. No se mezclan los códigos.
+> **Este repo solo contiene Nexus_Osint_X + el puente.** OsintCiberCrimeX y ThreatJarvisX tienen su propio lugar y se publican por separado. No se mezclan los códigos.
 
 ![Panel JARVIS](Nexus_Jarvis.png)
 
