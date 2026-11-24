@@ -2,7 +2,9 @@
 
 ![TheCondor](NEXSUSX.jpg)
 
-> **Radar OSINT autohospedado**: más de 330 entradas de fuentes públicas (RSS, APIs, listas de IPs, canales públicos de Telegram), globo 3D con deck.gl, satélites, correlación entre dominios, MITRE ATT&CK, panel J.A.R.V.I.S, detector de denuncias y bot de Telegram (⚠️ sin probar). **Es un prototipo y puede dar falsos positivos: léelo como una pista, no como una prueba.** Todo en un único `nexus.py` ejecutable con `python nexus.py` o `uvicorn`.
+> **Radar OSINT autohospedado**: más de 330 entradas de fuentes públicas (RSS, APIs, listas de IPs, canales públicos de Telegram), globo 3D con deck.gl, satélites, correlación entre dominios, MITRE ATT&CK, panel J.A.R.V.I.S, detector de denuncias y bot de Telegram (⚠️ sin probar). **Es un prototipo y puede dar falsos positivos: léelo como una pista, no como una prueba.** Todo en un único `Nexus_Osint_X.py` ejecutable con `python Nexus_Osint_X.py` o `uvicorn`.
+
+![Nexus — arcos DDoS reales](NexusOsintX_Arcos_D_d_0_S.png)
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.110%2B-009688?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com/)
@@ -36,6 +38,42 @@
 
 
 ---
+
+## 🧩 Ecosistema Nexus · cada herramienta en su casa
+
+Nexus_Osint_X no está solo. Forma parte de un conjunto de **herramientas independientes**, cada una con su propio repositorio, su propio puerto y su propia base de datos. Puedes usar cualquiera por separado; no necesitan estar todas en marcha a la vez.
+
+| Herramienta | Rol | Repositorio | Estado |
+|---|---|---|---|
+| **Nexus_Osint_X** (este repo) | **Base central de mando OSINT**: radar de eventos, mapa 3D, correlación, ATT&CK, panel JARVIS, export | `Condor2026/Nexus_Osint_X` | Prototipo funcional (v3.1) |
+| **OsintCrime** | **Buscador OSINT de crimen**: extrae IOCs (IPs, C2, CVE) y grupos desde canales públicos de Telegram | repositorio propio | En preparación · **dic 2026** |
+| **ThreatJarvisX** | **Asistente IA (JARVIS)** que se comunica con Nexus por su API HTTP local | repositorio propio | Activo |
+| **Puente_Nexus** (en este repo) | **Enlace** entre OsintCrime y Nexus: lanza, vigila y sincroniza ambas por sus APIs locales | `Condor2026/Nexus_Osint_X` | v1.1 funcional |
+
+**Cómo encaja todo:**
+
+```
+┌─────────────────┐        ┌──────────────────┐        ┌─────────────────┐
+│   OsintCrime    │  IOCs  │  Puente_Nexus    │ watch  │  Nexus_Osint_X  │
+│  (buscador TG)  │ ─────► │  (este repo)     │ ─────► │ (mando OSINT)   │
+└─────────────────┘        └──────────────────┘        └─────────────────┘
+                                                              ▲
+                                                              │ API HTTP
+                                                       ┌──────┴───────┐
+                                                       │ ThreatJarvisX │
+                                                       │  (asistente)  │
+                                                       └───────────────┘
+```
+
+- **Nexus_Osint_X** funciona **solo**, sin nada más. Es el radar.
+- **OsintCrime** funciona **solo**, sin Nexus. Es el buscador.
+- **Puente_Nexus** es un *extra* incluido aquí porque es lo que conecta este repo con OsintCrime. Sin el puente, las dos herramientas simplemente no se hablan (lo cual es perfectamente válido).
+- **ThreatJarvisX** vive en su propio repo y consulta a Nexus por la API (`/api/kpis`, `/api/analytics`, `/api/crypto`…). No se publica aquí.
+
+> **Este repo solo contiene Nexus_Osint_X + el puente.** OsintCrime y ThreatJarvisX tienen su propio lugar y se publican por separado. No se mezclan los códigos.
+
+![Panel JARVIS](Nexus_Jarvis.png)
+
 
 ## ⚠️ Descargo de responsabilidad
 
@@ -73,7 +111,7 @@ Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios di
 - **No se ha probado contra todos los endpoints reales** a la vez: muchas fuentes se han desarrollado contra respuestas de ejemplo y pueden fallar, cambiar de formato o bloquearte desde tu red/IP. Por eso hay circuit breaker, fallbacks y la pestaña **🩺 Fuentes**.
 - El **render 3D del globo con mapas base (teselas)** depende de tu navegador/GPU y de la versión de deck.gl que cargue desde CDN. Puede haber artefactos visuales según el equipo. Si algo se ve raro, prueba la vista **Plano** o cambia el mapa base.
 - No hay suite de tests automatizados completa ni auditoría de seguridad formal.
-- Es un **único archivo** (`nexus.py`, ~15 000 líneas) por decisión de diseño: fácil de copiar y ejecutar, incómodo de mantener. Es lo que hay.
+- Es un **único archivo** (`Nexus_Osint_X.py`, ~15 000 líneas) por decisión de diseño: fácil de copiar y ejecutar, incómodo de mantener. Es lo que hay.
 
 | Componente | Estado | Notas |
 |---|---|---|
@@ -87,6 +125,7 @@ Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios di
 | Monitor DDoS (listas vivas) | 🟡 En pruebas | IPs frescas de listas vivas + ThreatFox + rangos CIDR de NoName057(16); solo se guardan las que coinciden con un grupo, con retención |
 | **Bot de Telegram** | ⚠️ **Sin probar** | **No se sabe si funciona.** El código está, pero no se ha ejecutado de principio a fin. **Se arreglará otro día.** |
 | LLM (resumen) | 🟡 Opcional | Requiere `OPENAI_API_KEY`; sin ella, devuelve "no disponible" |
+| **Puente_Nexus** (enlace con OsintCrime) | ✅ v1.1 | Lanza, vigila y sincroniza Nexus ↔ OsintCrime por API local. Ver [sección del puente](#-puente_nexus--enlace-con-osintcrime) |
 | War-gaming / simulación | ❌ No existe | No está previsto (ver Filosofía) |
 
 **Sobre el bot de Telegram:** el código está escrito, pero **no se ha probado**. No sé si arranca, si los comandos responden o si el polling falla. **No lo uses como canal de alertas en producción.** Mientras tanto, el resto del sistema funciona sin él: si no defines `TELEGRAM_BOT_TOKEN`, el bot simplemente no arranca y todo lo demás sigue igual.
@@ -116,6 +155,7 @@ Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios di
 | **Tendencia / «próximo intervalo»** | Es una recta ajustada a unos pocos intervalos recientes. Sirve para ver hacia dónde apunta la curva, no para anticipar nada. |
 | **Comparaciones («vs. antes»)** | Si cambian las fuentes disponibles (caídas, bloqueos, circuit breaker abierto), el contador baja o sube **sin que el mundo haya cambiado**. Mira **🩺 Salud de fuentes** antes de interpretar una bajada. |
 | **Datos antiguos o incompletos** | Eventos viejos conservan el formato/descripcion con el que se guardaron. Los barridos pueden quedarse a medias si una fuente tarda. |
+| **Lo que añade el puente a la watchlist** | El puente copia IOCs de OsintCrime a la watchlist de Nexus. Si OsintCrime marca una IP como C2 y en realidad era una víctima, Nexus la subirá de severidad en eventos que la mencionen. El puente registra cada cosa que añade en `puente_estado.json` y permite **retirarla** sin tocar lo que pusiste tú. |
 
 ### Falsos negativos (lo que NO ves)
 
@@ -169,11 +209,12 @@ Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios di
 - **Alarmas con sonido opcional** (🔔) para eventos críticos nuevos.
 - **Falsos positivos manejables**: marcar un evento como falso positivo y **silenciar** temporalmente una fuente/grupo/término.
 - **Anti falsos positivos en el detector**: descarta noticias que *hablan* de un grupo (atribuciones, «según investigadores…») y ataques de un grupo a su aliado. *Reduce* el ruido; no lo elimina.
-- **Claves en el código (`CLAVES`)**: si no usas `.env`, puedes pegar tus claves en el diccionario `CLAVES` al principio de `nexus.py`.
+- **Claves en el código (`CLAVES`)**: si no usas `.env`, puedes pegar tus claves en el diccionario `CLAVES` al principio de `Nexus_Osint_X.py`.
 - **«Eliminar datos»** con modal de confirmación `BORRAR`; **nunca** toca la intel de cibercrimen, IPs de grupos, detecciones, caché de geolocalización, ajustes ni auditoría.
 - **Botón «⏻ Apagar»** que cierra NEXUS y libera el puerto.
 - **Idioma ES/EN** (`🌐 ES/EN`), guardado en `localStorage`.
 - **Nombres de ciudades** (`🏙`), graticule, arcos con `GreatCircleLayer`/`ArcLayer`, `ScatterplotLayer` para IPs de grupos (cuadrado = IP única), correlaciones en magenta y ficha de evento con enlace al original.
+- **Compatible con el ecosistema**: el **Puente_Nexus** (incluido aquí) puede sincronizar la watchlist desde OsintCrime y cruzar IOCs; **ThreatJarvisX** (repo aparte) consume la API de Nexus.
 
 ---
 
@@ -184,6 +225,7 @@ Nexus_Osint_X es un **prototipo funcional**, hecho con el tiempo y los medios di
 - Python **3.11+**
 - (Opcional) `GeoLite2-City.mmdb` de MaxMind para geolocalización local. Sin él se usa `ip-api.com/batch` (límite 15 req/min) y, si este limita o falla, `get.geojs.io`.
 - (Opcional) `openpyxl` para exportar a Excel (`pip install openpyxl`).
+- (Opcional) **Puente_Nexus** solo si vas a conectar con OsintCrime: vive en este mismo repo, no instala nada extra.
 
 ### 2. Instalar y configurar
 
@@ -198,7 +240,7 @@ pip install -r requirements.txt
 
 cp .env.example .env
 # Edita .env: como mínimo cambia ADMIN_PASSWORD y genera JWT_SECRET
-# (alternativa sin .env: pega tus claves en el diccionario CLAVES al inicio de nexus.py)
+# (alternativa sin .env: pega tus claves en el diccionario CLAVES al inicio de Nexus_Osint_X.py)
 ```
 
 Genera un `JWT_SECRET` fuerte:
@@ -210,7 +252,7 @@ python -c "import secrets; print(secrets.token_hex(32))"
 ### 3. Ejecutar
 
 ```bash
-python nexus.py
+python Nexus_Osint_X.py
 # → http://127.0.0.1:8000
 ```
 
@@ -218,13 +260,25 @@ El primer barrido arranca solo en segundo plano (retrasado ~8 s para que el pane
 
 **Nota:** el host está fijado a `127.0.0.1` por defecto (`NEXUS_HOST`). No se puede poner `0.0.0.0` por error: tendrías que definirlo a propósito en `.env` o editar el `.py`. Si el puerto 8000 está ocupado, usa el siguiente libre (8001…8024) y lo dice en el log.
 
-**Nota sobre instancias:** si arrancas dos NEXUS (p. ej. `dg.py` y `nexus.py`) contra la **misma** `nexus.db`, se bloquean entre sí (`database is locked`) y el panel se cuelga. Al arrancar se avisa en el log con «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!». Cierra el otro (`pkill -f nexus.py`; `pkill -f dg.py`) y deja solo uno.
+**Nota sobre instancias:** si arrancas dos NEXUS (p. ej. `dg.py` y `Nexus_Osint_X.py`) contra la **misma** `nexus.db`, se bloquean entre sí (`database is locked`) y el panel se cuelga. Al arrancar se avisa en el log con «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!». Cierra el otro (`pkill -f Nexus_Osint_X.py`; `pkill -f dg.py`) y deja solo uno.
+
+### 4. (Opcional) Arrancar con el puente y OsintCrime
+
+Si tienes OsintCrime en la misma carpeta y quieres el ecosistema completo:
+
+```bash
+python Puente_Nexus.py --all
+# → lanza OsintCrime (8765) + Nexus (8000) + panel del puente (8800)
+# → sincroniza watchlist automáticamente cada 10 min
+```
+
+Ver la sección [Puente_Nexus](#-puente_nexus--enlace-con-osintcrime) para más detalles.
 
 ---
 
 ## 🔑 Fuentes y claves
 
-**Dos formas de poner las claves:** en `.env`, o directamente en el diccionario `CLAVES` al inicio de `nexus.py` (lo que pongas ahí se carga al arrancar y tiene el mismo efecto que una variable de entorno). Si usas `CLAVES`, **no subas ese archivo a un repositorio público con tus claves dentro**.
+**Dos formas de poner las claves:** en `.env`, o directamente en el diccionario `CLAVES` al inicio de `Nexus_Osint_X.py` (lo que pongas ahí se carga al arrancar y tiene el mismo efecto que una variable de entorno). Si usas `CLAVES`, **no subas ese archivo a un repositorio público con tus claves dentro**.
 
 Todas las claves son **opcionales**: sin ellas, la fuente simplemente devuelve 0 eventos y el resto del sistema sigue funcionando. En la pestaña **🩺 Fuentes** se marca con 🔑 la fuente que necesita clave.
 
@@ -363,7 +417,6 @@ Nexus_Osint_X es **OSINT: observación de lo que pasa**, no planificación de lo
 
 ---
 
-
 ## 🔒 Seguridad (lo que se ha mitigado)
 
 Este es un **prototipo** y **no ha pasado una auditoría formal**. Aun así, se han aplicado las mitigaciones razonables con el tiempo disponible:
@@ -380,14 +433,14 @@ Este es un **prototipo** y **no ha pasado una auditoría formal**. Aun así, se 
 - **URLs de malware defangeadas**: no hay clic accidental a C2 desde el panel.
 - **Sin ejecución de código remoto**: los datos externos se tratan como texto.
 - **CSRF/DNS-rebinding**: el bypass de loopback exige `Host` loopback y `Origin` igual a `Host` (si hay `Origin`) y `Sec-Fetch-Site` same-origin/none.
-- **Claves en el código (`CLAVES`)**: cómodo, pero no compartas ni publiques `nexus.py` con tus claves dentro.
+- **Claves en el código (`CLAVES`)**: cómodo, pero no compartas ni publiques `Nexus_Osint_X.py` con tus claves dentro.
 - **`.gitignore`** excluye `.env`, `*.db`, `.cache/`, `intel/`, `GeoLite2-City.mmdb`, `.nexus_jwt_secret`.
 - **Sin salida a los indicadores**: OpenPhish se resuelve por DNS (nunca se visita la URL); las URLs de malware se muestran defangeadas y el enlace apunta a la ficha de URLhaus; los enlaces de IOC apuntan a servicios externos (VirusTotal, AbuseIPDB…), pero NEXUS no les envía nada por ti.
+- **El Puente_Nexus** valida cada acción con un **token CSRF** (`X-Token`) y solo escucha en loopback. No añade endpoints públicos a Nexus: usa su API local como cualquier otro cliente.
 
 **Si encuentras una vulnerabilidad**, abre un aviso privado (ver `SECURITY.md`). **No abras un issue público con detalles explotables.**
 
 ---
-
 
 ## 📐 Cómo se puntúa
 
@@ -484,6 +537,7 @@ Overlay de análisis global (`j` o botón **JARVIS**), con ventana propia (1 h /
 - **Buscador de IP** (ver arriba) con enlaces a eventos en el mapa.
 - **Paneles temáticos de la ventana** (Ciber, Naturaleza, Economía, Conflicto, Crimen): área apilada por dominio + indicadores + chips.
 
+---
 
 ## 🔌 API
 
@@ -546,6 +600,66 @@ Auth: `Authorization: Bearer <jwt>` o HTTP Basic. Desde `127.0.0.1` sin proxy el
 
 Formatos de export (`/export/{fmt}`): `csv`, `json`, `ndjson`, `geojson`, `kml`, `markdown`, `html`, `xlsx` (requiere `openpyxl`), `ips`, `grupos_csv`, `grupos_json`, `zip`. Parámetros: `hours`, `domain`, `group`, `severity`, `q`, `limit`, `hist` (para grupos).
 
+---
+
+## 🌉 Puente_Nexus · enlace con OsintCrime
+
+> **Puente_Nexus v1.1** — enlace entre **OsintCrime** (buscador OSINT de crimen, repo aparte, disponible en **diciembre 2026**) y **Nexus_Osint_X**. Vive en este mismo repositorio porque es lo que une ambas herramientas. **No modifica** ni OsintCrime ni Nexus: son procesos independientes, cada uno con su puerto y su base de datos.
+
+### Qué hace
+
+- **Lanza / detiene / vigila** las dos herramientas (menú de terminal o panel web del puente en `http://127.0.0.1:8800`).
+- **Sincroniza OsintCrime → Nexus**: los IOCs que OsintCrime extrae de Telegram (IPs, C2, CVE) y los nombres de los grupos más citados pasan a la **watchlist** de Nexus. Así Nexus etiqueta (y sube de severidad) cualquier evento del mapa que coincida con ellos.
+- **Coincidencias**: cruza los eventos recientes de Nexus con los IOCs / grupos de OsintCrime y las muestra en el panel (IP vista en Telegram que además aparece como C2 en el mapa, CVE citado en ambos, grupo mencionado…). **Exportación CSV/JSON** de las coincidencias.
+- **Sincronización automática periódica** mientras las dos estén en marcha (`PUENTE_SYNC_SECS`, 600 s por defecto; elegible en el panel).
+- **Todo lo que el puente añade a Nexus queda registrado** en `puente_estado.json` y se puede **retirar** sin tocar lo que pusiste tú.
+
+### Cómo arrancarlo
+
+```bash
+# Con las tres herramientas en la misma carpeta:
+python Puente_Nexus.py                 # menú de terminal + panel web del puente en :8800
+python Puente_Nexus.py --all           # lanza OsintCrime + Nexus + panel y sincroniza solo (Ctrl+C apaga)
+python Puente_Nexus.py --status        # estado de las dos herramientas
+python Puente_Nexus.py --sync          # una sincronización y sale
+python Puente_Nexus.py --matches       # coincidencias actuales y sale
+```
+
+Rutas alternativas: `--osint-path /ruta/OsintCrime.py`, `--nexus-path /ruta/Nexus_Osint_X.py` (o variables `OSINT_PATH` / `NEXUS_PATH`).
+
+### Puertos y variables
+
+| Herramienta | Puerto por defecto | Variable |
+|---|---|---|
+| OsintCrime | `8765` | `OSINT_PORT` |
+| Nexus | `8000` (o el siguiente libre: 8001, 8002…) | `NEXUS_PORT` |
+| Panel del puente | `8800` | `PUENTE_PORT` |
+| Intervalo de sync | `600` s | `PUENTE_SYNC_SECS` |
+| No apagar al salir | — | `PUENTE_KEEP=1` o `--keep` |
+
+### Detalles que ya están resueltos
+
+- **Detección real del puerto de Nexus**: si el 8000 está ocupado, Nexus arranca en el 8001, 8002… El puente **escanea 25 puertos** y comprueba que lo que responde **es Nexus de verdad** (`/api/health` con `status: ok` + `sweep_running` + `sources`), no otro programa.
+- **Cruza también las IPs de grupos de Nexus** (monitor DDoS / listas) con OsintCrime.
+- **Filtros y exportación** (CSV/JSON) de coincidencias desde el panel.
+- **Estado en vivo de Nexus** en el panel del puente (eventos 24 h, críticos, altas, correlaciones, último barrido, intervalo).
+- **Comprobación de dependencias**: si a Python le faltan módulos para lanzar alguna herramienta, el puente **dice qué `pip install` hacer** antes de arrancar.
+- **Parada ordenada**: primero pide `POST /api/shutdown` a Nexus (si está), luego SIGINT al grupo de proceso; si no basta, termina.
+- **Solo stdlib**: el puente no instala nada extra, usa `urllib`, `http.server`, `subprocess`…
+
+### Lo que el puente NO hace
+
+- No modifica ninguna de las dos herramientas (ni ficheros, ni BD, ni código).
+- No escanea la red, no hace peticiones fuera de loopback.
+- No toca tu `.env` ni tus claves.
+- No mezcla los repos: **OsintCrime se publica por separado**; este repo solo incluye el puente porque es el punto de unión.
+
+### Si OsintCrime aún no está
+
+- El puente **no arranca OsintCrime** si no encuentra el archivo (mensaje claro con la ruta buscada). Puedes usar Nexus solo, sin puente, sin problema.
+- Cuando OsintCrime se publique (dic 2026), coloca los dos `.py` en la misma carpeta y `python Puente_Nexus.py --all` deja el ecosistema en marcha.
+
+---
 
 ## 🤖 Bot de Telegram (⚠️ sin probar)
 
@@ -568,11 +682,12 @@ Requiere `TELEGRAM_BOT_TOKEN` y `TELEGRAM_CHAT_ID` en `.env`. Si lo pruebas y fa
 
 **Nota:** el bot está en la lista de tareas pendientes. **Hay que descansar.** Se arreglará cuando haya tiempo.
 
+---
 
 ## 🧱 Arquitectura
 
 ```
-nexus.py
+Nexus_Osint_X.py
 ├── §0     Configuración global + caché TTL + circuit breaker + User-Agent rotativo + redacción de secretos
 ├── §0.bis Helpers generales (_num, _str, _records)
 ├── §1     Auth (JWT + Basic + bypass loopback con Host/Origin/Sec-Fetch-Site)
@@ -607,6 +722,7 @@ nexus.py
 - **Single-instance.** Lock en `nexus.db.lock` (`fcntl.flock`): si otro NEXUS usa la misma BD, avisa en el log con «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!».
 - **Watchdog de event loop.** Si el servidor se bloquea >2 s, lo avisa en el log (así se ve qué lo cuelga: barrido, BD, etc.).
 - **Barrido serializado con deadline suave.** Las fuentes lentas (GDELT, con su límite de peticiones y caché) siguen en segundo plano y se incorporan con `_ingest_late` al terminar, sin retrasar el resto.
+- **El puente es un cliente más.** No comparte memoria ni BD con Nexus: habla por HTTP (`/api/watchlist`, `/api/events`, `/api/group_ips`, `/api/kpis`). Así puede vivir en su propio proceso y apagarse sin tocar Nexus.
 
 ---
 
@@ -620,8 +736,8 @@ nexus.py
 | "circuit open" en una fuente | 5 fallos seguidos → pausada 5 min | **🔌 Reiniciar circuit breakers** en la pestaña Fuentes |
 | El bot de Telegram no responde | **No está probado; puede no funcionar** | Está en la lista de pendientes. **Se arreglará otro día.** Mientras, usa el dashboard. |
 | Error de migración de BD | BD creada con versión anterior | Se migra sola al arrancar; si falla, borra `nexus.db` y reinicia (pierdes histórico) |
-| `database is locked` + panel colgado | Dos NEXUS (p. ej. `dg.py` y `nexus.py`) sobre la misma `nexus.db` | Mira el log: «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!». Cierra el otro (`pkill -f nexus.py`; `pkill -f dg.py`) y deja solo uno |
-| Puerto 8000 ocupado | Instancia anterior no cerrada | Nexus_Osint_X usa el siguiente libre (8001…8024) y lo dice en el log |
+| `database is locked` + panel colgado | Dos NEXUS (p. ej. `dg.py` y `Nexus_Osint_X.py`) sobre la misma `nexus.db` | Mira el log: «¡OTRO NEXUS YA ESTÁ USANDO ESTA MISMA BASE DE DATOS!». Cierra el otro (`pkill -f Nexus_Osint_X.py`; `pkill -f dg.py`) y deja solo uno |
+| Puerto 8000 ocupado | Instancia anterior no cerrada | Nexus_Osint_X usa el siguiente libre (8001…8024) y lo dice en el log. **El puente lo detecta solo** |
 | `sqlite3.IntegrityError` en eventos | Duplicado por `raw_hash` (normal) | Se ignora silenciosamente; no es un error |
 | La geolocalización va lenta | `ip-api.com` limita a 15 req/min | Sin `GeoLite2-City.mmdb` es normal; añade el `.mmdb` para ir local |
 | El detector de Telegram no avanza | 429 de Telegram (rate limit) | Se reintenta solo; en la pestaña Detector verás «Telegram limitó las peticiones» |
@@ -631,23 +747,39 @@ nexus.py
 | Una IP mía sale en una lista | Las listas pueden incluir IPs compartidas, reasignadas o de dispositivos comprometidos | Revisa tu red/dispositivos; no implica que seas el atacante ni la víctima |
 | Triángulos o bandas raras en el globo 3D | Artefactos de teselas/GPU según navegador | Cambia de mapa base, pasa a vista **Plano** o actualiza el navegador; si persiste, abre un issue con captura y nivel de zoom |
 | «Barriendo…» eterno | El barrido tardó más de 90 s (seguro de la UI) | La UI libera sola los controles; si el servidor no responde, mira el log y el watchdog `[RENDIMIENTO]` |
+| **El puente dice «OsintCrime no está en marcha»** | OsintCrime no está publicado (dic 2026) o no se encuentra el `.py` | Es normal si aún no lo tienes. Usa Nexus solo; cuando salga, colócalo en la misma carpeta |
+| **El puente dice «faltan módulos de…»** | A este Python le faltan dependencias | El mensaje ya dice el `pip install` exacto. Instálalo y vuelve a lanzar |
+| **El puente no encuentra Nexus** | Puerto 8000 ocupado y Nexus en otro puerto | El puente escanea 25 puertos y comprueba `/api/health`. Si aún así falla, pulsa **🔎 Detectar NEXUS** en el panel del puente |
+| **Nexus pide auth para modificar la watchlist** | `NEXUS_LOCAL_NOAUTH=0` o vienes de fuera de loopback | Define `NEXUS_LOCAL_NOAUTH=1` (por defecto ya lo está desde el propio equipo) o usa credenciales |
 
+---
 
 ## 📁 Estructura del repo
 
 ```
 .
-├── nexus.py                 # Aplicación completa
+├── Nexus_Osint_X.py            # Aplicación completa (v3.1)
+├── Puente_Nexus.py             # Puente con OsintCrime (v1.1)
 ├── requirements.txt
-├── .env.ejemplo / .env.example
+├── .env.example
 ├── .gitignore
 ├── LICENSE
 ├── README.md
 ├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
 ├── SECURITY.md
+├── ACCESSIBILITY.md
+├── .github/
+│   └── PULL_REQUEST_TEMPLATE.md
+├── NEXSUSX.jpg                 # Cabecera del README
+├── Nexus_Jarvis.png            # Captura del panel JARVIS
+├── NexusOsintX_Arcos_D_d_0_S.png   # Captura de arcos DDoS reales
+└── Captura de pantalla_20261124_*.png   # Capturas adicionales
 ```
 
-Archivos que se crean en runtime (no versionados): `nexus.db`, `nexus.db-wal`, `nexus.db-shm`, `nexus.db.lock`, `.cache/watchlist.json`, `.nexus_jwt_secret`, `GeoLite2-City.mmdb` (opcional, lo pones tú).
+Archivos que se crean en runtime (no versionados): `nexus.db`, `nexus.db-wal`, `nexus.db-shm`, `nexus.db.lock`, `.cache/watchlist.json`, `.nexus_jwt_secret`, `GeoLite2-City.mmdb` (opcional, lo pones tú), y los del puente: `puente_estado.json`, `puente_logs/`.
+
+**Nota sobre el ecosistema:** OsintCrime y ThreatJarvisX **no viven aquí**. Cada uno tiene su propio repositorio y se publica por separado. Este repo solo contiene Nexus_Osint_X + el puente.
 
 ---
 
@@ -735,11 +867,12 @@ Si eres responsable de una de estas fuentes y quieres que ajuste la atribución,
 
 ## 📄 Licencia
 
-**NEXUS_Osint_X · OSINT Command Center**
+**Nexus_Osint_X · OSINT Command Center**
 AGPL-3.0, Copyright (C) 2026 Condor2026
 
-Licencia: GNU AGPLv3 (ver `LICENSE`). El código es 100 % del autor; **no se aceptan PRs** (las ideas y los reportes de errores sí, vía issues).
+Licencia: GNU AGPLv3 (ver `LICENSE`). El código es 100 % del autor; **no se aceptan PRs** (las ideas y los reportes de errores sí, vía issues). Ver también [`CONTRIBUTING.md`](./CONTRIBUTING.md), [`CODE_OF_CONDUCT.md`](./CODE_OF_CONDUCT.md), [`SECURITY.md`](./SECURITY.md) y [`ACCESSIBILITY.md`](./ACCESSIBILITY.md).
 
+---
 
 ## 💤 Nota final
 
@@ -749,7 +882,6 @@ Este es un **prototipo** hecho con el tiempo y los medios disponibles. **Hice to
 
 **El bot de Telegram no se ha probado** y **no se sabe si funciona**. **Se arreglará otro día.**
 
-Si algo no funciona, abre un issue con el log y la versión. Si algo funciona, disfrútalo. Si algo falla y sabes cómo arreglarlo, cuéntalo en un issue (no se aceptan PRs, pero las ideas y los diagnósticos son bienvenidos).
+Nexus_Osint_X forma parte de un **ecosistema** con **OsintCrime** (buscador, repo aparte, dic 2026) y **ThreatJarvisX** (asistente IA, repo aparte). El **Puente_Nexus** que los conecta vive en este repo porque es el punto de unión, pero cada herramienta mantiene su propio lugar. Si quieres el conjunto completo, necesitarás los tres repos.
 
-Gracias por pasarte. Deja una estrella si te gustó el proyecto.
-- Condor2026
+Si algo no funciona, abre un issue con el log y la versión. Si algo funciona, disfrútalo. Si algo falla y sabes cómo arreglarlo, cuéntalo en un issue (no se aceptan PRs, pero las ideas y los diagnósticos son bienvenidos).
