@@ -355,6 +355,8 @@ Las fuentes sin clave (Feodo, CISA KEV, SANS ISC, Blocklist.de, ET Compromised, 
 
 ## 🗺️ Qué significa cada cosa en el mapa
 
+![TheCondor](NexusCommandCenter.png)
+
 ### Puntos
 Cada punto es **un evento publicado por una fuente** con `source`, `url` y `timestamp` verificables. Que el evento esté publicado no garantiza que esté bien clasificado ni bien ubicado (ver «Falsos positivos»).
 - **Tamaño**: severidad + relevancia (CRÍTICA > ALTA > MEDIA > BAJA).
