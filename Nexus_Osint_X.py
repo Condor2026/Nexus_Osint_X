@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: AGPL-3.0-only
-# Copyright (C) 2026                          Condor2026
+# Copyright (C) 2026 AlquimistaPlata
 #
 # Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
 # GNU Affero General Public License v3 publicada por la Free Software Foundation.
@@ -5765,6 +5765,26 @@ def _claim_victims(text: str, home: Optional[str]) -> list[str]:
 
 # Lista de canales públicos de Telegram de tu Andrómeda (se escanean por tandas rotativas; los que no existen se saltan solos)
 TG_ANDROMEDA_CHANNELS = [
+    "sanzzchpublic", "gbpromosisanzz", "AreYouSecure", "LunarisSec", "lolxdchat",
+    "Bugmohol_diary", "DarkForums_HN", "DarkForums_SU", "DarkForums_io", "cybercrewagain", "Qxcyber666",
+    "callmen3x", "H3c4kedz_Hacker", "GlobalDissident_comment", "litecoinpricechat", "KGB_LEGACYDOX", "devsbulletproof",
+    "LulzSecBlack", "redXunits", "redxchat0", "hjhjjahajaj", "Anonymous_Switzerland", "netbotter",
+    "TheLizardSquard", "AnonForJustice0", "BoatOfLunarisSec", "omnipus_tg", "ETHSecurity", "polemicize",
+    "+iK7ypBGWTUJlOGI0", "Arcanum_reserv", "Shady_93362", "+1EEFSS_3XG82Zjc6", "arcanum-pentest.com",
+    "+XHZdK3uFVARlYzZh", "RVvoenkor", "+yM1NGYGCKQk3MGIx", "nnm05716fra", "+qnvbmn_zhW1lZDQy", "+pCJr5PFN5Nc5NDNh",
+    "+qnvbmn_zhW1lZDQy", "lineasrojas", "+XHZdK3uFVARlYzZh", "guerrasygeo",
+    "vamosarusia3264", "atodapotencia", "hackhaxx", "+5Q-AbruRPvs1ODg1", "z_arhiv", "tass_es53577", "QuietSecurity",
+    "QuietSecRUS", "Qxcyber666", "qxcyberchat",
+    "xzarussec", "tribute", "unknown_cambodia", "bnbshnick", "K3YOFFF4CE", "+BOqzf8Luj_o3MTNl", "cybercrewagain", "harmonyxbt445", "cr2ck4u", "OfficialKantin",
+    "TheLizardSquard", "AnonForJustice0",
+    "+iK7ypBGWTUJlOGI0", "Arcanum_reserv", "Shady_93362", "+1EEFSS_3XG82Zjc6", "arcanum-pentest.com",
+    "+XHZdK3uFVARlYzZh", "RVvoenkor", "+yM1NGYGCKQk3MGIx", "nnm05716fra", "+qnvbmn_zhW1lZDQy", "+pCJr5PFN5Nc5NDNh",
+    "+qnvbmn_zhW1lZDQy", "lineasrojas", "+XHZdK3uFVARlYzZh", "guerrasygeo",
+    "vamosarusia3264", "atodapotencia", "hackhaxx", "+5Q-AbruRPvs1ODg1", "z_arhiv", "tass_es53577", "QuietSecurity",
+    "QuietSecRUS", "Qxcyber666", "qxcyberchat",
+    "xzarussec", "tribute", "unknown_cambodia", "bnbshnick", "K3YOFFF4CE", "+BOqzf8Luj_o3MTNl", "cybercrewagain", "harmonyxbt445", "cr2ck4u", "OfficialKantin",
+    "NorthTeamInvisible", "h3llo_W0rld0", "+C1iV6r9QDEljZTli", "ENTHER_ERROR_SYSTEM", "rusich_army", "wargonzo", "tfhchatgc"
+    "AnonForJustice0", "CoupTeamChat", "AnonymousBotnet", "WorldOfBotnet", "ChatDDoS", "GlobalHackerGroup", "CoupBoss", 
     "blocusbcn31", "blocusbcn", "blocus2reserva", "p4ndabuy", "TemDarkbins", "constanta_priority",
     "ShinyEquationCartel", "UNC6783", "fbi_breachforums", "aegismiddleman", "shinyhunte_rs", "Breachforumsh",
     "UNC6040prt2", "ShinyHunters1channel", "frenchhackerstchat", "shinyhuntersco", "ShinyHunterCorp",
@@ -5821,8 +5841,7 @@ TG_ANDROMEDA_CHANNELS = [
     "xaknet_official", "serverkillers", "user_secc", "hackers_void", "cheats_cs_legacy", "WeAreKillnet_Official",
     "usersec_collective", "anonymoussudan", "rootsec", "darkstormteam", "Dark_StormTeam", "imaxairu",
     "noname05716_esp", "DarkStormTeamOfficial", "darkstormteamback", "CyberSorcerers", "DrSinaway", "GLITCHcracker",
-    "Dark_Storm_Team", "SSSO_Official", "peoplescyberarmy", "usersecc", "WizardSec", "CoupTeam", "CoupTeamChat",
-    "AnonymousBotnet", "WorldOfBotnet", "ChatDDoS", "GlobalHackerGroup", "BotnetKingdom", "DataPremium_SSSO",
+    "Dark_Storm_Team", "SSSO_Official", "peoplescyberarmy", "usersecc", "WizardSec", "CoupTeam", "DataPremium_SSSO",
     "firmware_fpv", "KillNetSyndicate", "xaknet_team", "TAndroidBeta", "THEanonPR1ZRAKcriminal",
     "CyberSerp_Official", "KillMarket_Official", "lizard_squad", "lizardsquad", "cybercrewagain", "Mhwear100",
     "scatteredlapsus", "scattered_lapsus_hunters", "slsh_ops", "Inform_Zarya", "anon_reborn", "shinyhunters",
@@ -9331,7 +9350,7 @@ I18N_EN: dict[str, str] = {
     "Mapa": "Map", "Dominio": "Domain", "Todos": "All", "Severidad": "Severity", "Todas": "All", "Vista": "View",
     "🌍 Globo 3D": "🌍 3D Globe", "🗺 Plano": "🗺 Flat map", "Arcos": "Arcs", "Correl.": "Correl.",
     "Etiquetas": "Labels", "Países": "Countries", "⟳ Actualizar": "⟳ Refresh", "Auto 90s": "Auto 90s",
-    "🧠 JARVIS": "🧠 JARVIS", "📤 Exportar ▾": "📤 Export ▾", "Se exporta con los filtros actuales": "Exports with the current filters", "Barrido auto": "Auto sweep", "Manual": "Manual", "1 hora": "1 hour", "1 día": "1 day", "🚫 Ninguno (no mostrar IPs)": "🚫 None (hide IPs)",
+    "🧠 JARVIS": "🧠 JARVIS", "🎙️ Jarvis X": "🎙️ Jarvis X", "📤 Exportar ▾": "📤 Export ▾", "Se exporta con los filtros actuales": "Exports with the current filters", "Barrido auto": "Auto sweep", "Manual": "Manual", "1 hora": "1 hour", "1 día": "1 day", "🚫 Ninguno (no mostrar IPs)": "🚫 None (hide IPs)",
     "Secciones temáticas": "Thematic sections", "Terrorismo": "Terrorism", "Revueltas callejeras": "Street unrest", "Crimen urbano": "Urban crime",
     "Criptomonedas · top 10": "Cryptocurrencies · top 10", "Países con más actividad": "Most active countries", "Últimos eventos": "Latest events",
     "vs ventana anterior": "vs previous window", "Informe HTML": "HTML report", "Lista de IPs (.txt)": "IP list (.txt)",
@@ -11648,6 +11667,63 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'c') toggleCities();
   if (e.key === '/') { e.preventDefault(); $('filter-q').focus(); }
 });
+/* ───────── Threat Jarvis X: asistente de voz/IA en un cajón lateral. El iframe se crea al abrir por primera vez (no gasta nada antes) ───────── */
+const JX = { open: false, loaded: false, url: '', poll: null };
+function jxMsg(text, code, btns) {
+  const st = $('jx-state'); st.textContent = ''; st.hidden = false; $('jx-frame').hidden = true;
+  const p = document.createElement('div'); p.textContent = text; st.appendChild(p);
+  if (code) { const c = document.createElement('code'); c.textContent = code; st.appendChild(c); }
+  (btns || []).forEach(([label, fn]) => { const b = document.createElement('button'); b.type = 'button'; b.textContent = label; b.addEventListener('click', fn); st.appendChild(b); });
+}
+function jxDot(cls) { $('jx-dot').className = 'jx-dot ' + (cls || ''); }
+async function jxLoad() {
+  jxMsg('Buscando Threat Jarvis X…'); jxDot('');
+  let d = null;
+  try { const r = await fetch('/api/jarvisx/url', { cache: 'no-store' }); d = r.ok ? await r.json() : { error: 'HTTP ' + r.status }; } catch (e) { d = { error: 'sin respuesta' }; }
+  if (d.error) { jxDot('off'); return jxMsg('No se pudo consultar a Jarvis X (' + d.error + ').', null, [['Reintentar', jxLoad]]); }
+  if (d.no_token) { jxDot('off'); return jxMsg('Jarvis X está en marcha, pero no encuentro su token. Si usa otra carpeta de datos, arranca Nexus con TJX_HOME apuntando a ella.', null, [['Reintentar', jxLoad]]); }
+  if (!d.up) {
+    jxDot('off'); $('jx-tab').disabled = true; $('jx-off').disabled = true; JX.loaded = false;
+    const btns = [['Reintentar', jxLoad]];
+    if (d.can_start) btns.unshift(['▶ Arrancar Jarvis X', jxStart]);
+    return jxMsg('Jarvis X no está arrancado.' + (d.can_start ? ' Puedo lanzarlo yo (tarda unos segundos; Whisper carga después, en segundo plano).' : ' Arráncalo en una terminal:'), d.can_start ? null : d.cmd, btns);
+  }
+  JX.url = d.url; JX.loaded = true;
+  $('jx-state').hidden = true; $('jx-frame').hidden = false; jxDot('on');
+  $('jx-tab').disabled = false; $('jx-off').disabled = false;
+  if (!$('jx-frame').getAttribute('src') || $('jx-frame').getAttribute('src') === 'about:blank') $('jx-frame').src = d.url;
+}
+async function jxStart() {
+  jxMsg('Arrancando Jarvis X…');
+  try {
+    const r = await fetch('/api/jarvisx/start', { method: 'POST' });
+    if (!r.ok) { const e = await r.json().catch(() => ({})); return jxMsg('No se pudo arrancar: ' + (e.detail || 'HTTP ' + r.status), null, [['Reintentar', jxLoad]]); }
+  } catch (e) { return jxMsg('No se pudo arrancar (sin respuesta de Nexus).', null, [['Reintentar', jxLoad]]); }
+  let tries = 0; clearInterval(JX.poll);
+  JX.poll = setInterval(async () => {
+    tries++;
+    try { const d = await (await fetch('/api/jarvisx/url', { cache: 'no-store' })).json(); if (d.up) { clearInterval(JX.poll); jxLoad(); return; } } catch (e) {}
+    if (tries > 30) { clearInterval(JX.poll); jxMsg('Jarvis X no ha respondido en 45 s. Mira el registro: ~/.threat_jarvis_x/jarvisx.log', null, [['Reintentar', jxLoad]]); }
+  }, 1500);
+}
+function jxOpen(on) {
+  JX.open = on; $('jx').hidden = !on;
+  if (on && !JX.loaded) jxLoad();
+}
+async function jxOff() {
+  if (!confirm('¿Apagar Threat Jarvis X? Se libera su memoria; podrás arrancarlo de nuevo desde aquí.')) return;
+  try { await fetch('/api/jarvisx/stop', { method: 'POST' }); } catch (e) {}
+  $('jx-frame').src = 'about:blank'; JX.loaded = false; setTimeout(jxLoad, 1200);
+}
+$('btn-jx').addEventListener('click', () => jxOpen(!JX.open));
+$('jx-close').addEventListener('click', () => jxOpen(false));
+$('jx-wide').addEventListener('click', () => $('jx').classList.toggle('wide'));
+$('jx-tab').addEventListener('click', () => { if (JX.url) window.open(JX.url, '_blank', 'noopener,noreferrer'); });
+$('jx-off').addEventListener('click', jxOff);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && JX.open && !e.target.matches('input, select, textarea')) jxOpen(false);
+  if (e.key === 'a' && !e.ctrlKey && !e.metaKey && !e.altKey && !e.target.matches('input, select, textarea, iframe')) jxOpen(!JX.open);
+});
 initMap();
 $('btn-lang').addEventListener('click', () => setLang(LANG === 'en' ? 'es' : 'en'));
 if (LANG === 'en') setLang('en');
@@ -11922,6 +11998,24 @@ table.tbl td { padding: 5px 6px; border-bottom: 1px solid rgba(255,255,255,.04);
 
 /* ── JARVIS ── */
 #hud-neural { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 0; pointer-events: none; }
+/* Threat Jarvis X: cajón lateral (por encima del panel JARVIS, para usarlos a la vez) */
+#jx { position: fixed; top: 0; right: 0; bottom: 0; width: min(460px, 100vw); z-index: 900; display: flex; flex-direction: column; background: var(--bg-2); border-left: 1px solid var(--cyan); box-shadow: -10px 0 32px rgba(0,0,0,.55); }
+#jx[hidden] { display: none; }
+#jx.wide { width: min(880px, 100vw); }
+.jx-head { display: flex; align-items: center; gap: 6px; padding: 8px 10px; background: var(--bg-3); border-bottom: 1px solid var(--border); }
+.jx-head b { color: var(--cyan); letter-spacing: .5px; }
+.jx-head button { padding: 3px 9px; }
+.jx-spacer { flex: 1; }
+.jx-dot { width: 9px; height: 9px; border-radius: 50%; background: #6b7280; }
+.jx-dot.on { background: #2ee6a6; box-shadow: 0 0 8px #2ee6a6; }
+.jx-dot.off { background: #ff3b4a; }
+.jx-state { padding: 18px 16px; font-size: .86em; line-height: 1.6; color: var(--text-dim); }
+.jx-state[hidden] { display: none; }
+.jx-state code { display: block; margin: 8px 0; padding: 7px 9px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px; color: var(--cyan); font: .95em 'JetBrains Mono', monospace; user-select: all; }
+.jx-state button { margin: 4px 6px 0 0; }
+#jx-frame { flex: 1; width: 100%; border: 0; background: #03060f; }
+#jx-frame[hidden] { display: none; }
+@media (max-width: 700px) { #jx.wide { width: 100vw; } }
 .hud-head, .hud-grid { z-index: 1; }
 #hud { position: fixed; inset: 0; z-index: 800; background: #03060f; display: flex; flex-direction: column; padding: 14px 18px; overflow: auto; }
 #hud::before { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 2; background: repeating-linear-gradient(0deg, rgba(0,212,255,.035) 0 1px, transparent 1px 3px); }
@@ -12207,6 +12301,7 @@ body.hud-on .app { filter: blur(2px); }
     <div class="toolbar-group">
       <button type="button" id="btn-report" title="Informe de situación imprimible (alarmas, WAR, DDoS, correlaciones…) de la ventana de horas elegida">📄 Informe</button>
       <button type="button" id="btn-hud" class="btn-pink" title="Panel de análisis JARVIS ( j )">🧠 JARVIS</button>
+      <button type="button" id="btn-jx" title="Asistente de voz e IA Threat Jarvis X ( a )">🎙️ Jarvis X</button>
     </div>
     <div class="toolbar-group">
       <details class="menu">
@@ -12310,6 +12405,19 @@ body.hud-on .app { filter: blur(2px); }
     </div>
   </div>
 </div>
+
+<aside id="jx" hidden aria-label="Threat Jarvis X, asistente de voz e IA">
+  <div class="jx-head">
+    <b>Threat Jarvis X</b><span id="jx-dot" class="jx-dot" title="Estado"></span>
+    <span class="jx-spacer"></span>
+    <button type="button" id="jx-wide" title="Ensanchar / estrechar">⇔</button>
+    <button type="button" id="jx-tab" title="Abrir en una pestaña aparte" disabled>↗</button>
+    <button type="button" id="jx-off" title="Apagar Jarvis X y liberar su memoria" disabled>⏻</button>
+    <button type="button" id="jx-close" title="Ocultar ( Esc ); sigue funcionando por detrás">✕</button>
+  </div>
+  <div id="jx-state" class="jx-state"></div>
+  <iframe id="jx-frame" title="Threat Jarvis X" hidden allow="microphone; autoplay; clipboard-write" referrerpolicy="no-referrer"></iframe>
+</aside>
 
 <div id="hud" hidden>
   <canvas id="hud-neural"></canvas>
@@ -15092,6 +15200,107 @@ async def websocket_endpoint(ws: WebSocket):
         WS_MGR.disconnect(ws)
 
 
+# ─── ★ NUEVO · Threat Jarvis X: asistente de voz/IA local, incrustado en el panel ───
+# Es un proceso aparte (su propio puerto, sus propios modelos): Nexus solo le da un hueco en pantalla, le pasa el token y, si quieres,
+# lo arranca/apaga desde el botón. Si Jarvis X no está, Nexus funciona igual. Todo configurable por variables de entorno:
+#   TJX_URL (http://127.0.0.1:8765) · TJX_HOME (~/.threat_jarvis_x) · TJX_SCRIPT (junto a nexus.py) · TJX_PYTHON (intérprete con sus dependencias)
+TJX_URL = os.getenv("TJX_URL", "http://127.0.0.1:8765").rstrip("/")
+TJX_HOME = Path(os.getenv("TJX_HOME", str(Path.home() / ".threat_jarvis_x")))
+TJX_SCRIPT = Path(os.getenv("TJX_SCRIPT", str(Path(__file__).resolve().with_name("Threat_Jarvis_X.py"))))
+_TJX_PROC: dict = {"p": None}
+
+def _tjx_host_port() -> tuple[str, int]:
+    """Dirección de Jarvis X. Él anota en TJX_HOME/port el puerto que de verdad ha cogido (si el 8765 estaba ocupado usa otro)."""
+    u = urlparse(TJX_URL)
+    port = u.port or 80
+    try:
+        pp = int((TJX_HOME / "port").read_text(encoding="utf-8").strip())
+        if 1024 <= pp <= 65535:
+            port = pp
+    except (OSError, ValueError):
+        pass
+    return (u.hostname or ""), port
+
+def _tjx_base() -> str:
+    host, port = _tjx_host_port()
+    return f"{urlparse(TJX_URL).scheme or 'http'}://{host}:{port}"
+
+def _tjx_up() -> bool:
+    """¿Hay un Jarvis X escuchando? Se comprueba que quien responde se identifica como TJX (no otro programa en ese puerto)."""
+    host, port = _tjx_host_port()
+    try:
+        with socket.create_connection((host, port), timeout=0.6) as sk:
+            sk.settimeout(1.0)
+            sk.sendall(f"GET /favicon.ico HTTP/1.0\r\nHost: {host}:{port}\r\n\r\n".encode())
+            head = sk.recv(1024).decode("latin-1", "replace").lower()
+            return "server: tjx" in head
+    except OSError:
+        return False
+
+def _tjx_token() -> str:
+    try:
+        return (TJX_HOME / "token").read_text(encoding="utf-8").strip()
+    except OSError:
+        return ""
+
+@app.get("/api/jarvisx/url")
+async def api_jarvisx_url(request: Request, user: str = Depends(require_user_or_local)):
+    """Estado de Jarvis X y la URL (con su token) para el <iframe>. Solo con sesión o desde este equipo; nunca se expone a webs ajenas."""
+    if _tjx_host_port()[0] not in LOOPBACK_HOSTS:
+        return JSONResponse({"up": False, "error": "TJX_URL debe apuntar a este equipo (127.0.0.1)"}, status_code=400)
+    up = await asyncio.to_thread(_tjx_up)
+    tok = _tjx_token() if up else ""
+    if up and tok:                                    # puente: Jarvis X necesita saber en qué puerto está ESTE Nexus
+        try:
+            await HTTP.post(f"{_tjx_base()}/api/action", json={"action": "set_nexus", "url": str(request.base_url).rstrip("/")},
+                            headers={"X-Token": tok}, timeout=2)
+        except Exception:
+            pass                                      # versión antigua de Jarvis X o sin respuesta: no es grave
+    return {"up": bool(up and tok), "url": f"{_tjx_base()}/?t={quote(tok)}" if (up and tok) else "",
+            "no_token": bool(up and not tok), "can_start": bool(TJX_SCRIPT.is_file() and not up),
+            "cmd": f"python3 {TJX_SCRIPT.name} --no-browser"}
+
+@app.post("/api/jarvisx/start")
+async def api_jarvisx_start(request: Request, user: str = Depends(require_user_or_local)):
+    """Arranca Threat_Jarvis_X.py en segundo plano (sin ventana de navegador) y le dice dónde está Nexus."""
+    import subprocess, sys
+    if _tjx_host_port()[0] not in LOOPBACK_HOSTS:
+        raise HTTPException(status_code=400, detail="TJX_URL debe apuntar a este equipo")
+    if await asyncio.to_thread(_tjx_up):
+        return {"ok": True, "already": True}
+    if not TJX_SCRIPT.is_file():
+        raise HTTPException(status_code=404, detail=f"No encuentro {TJX_SCRIPT.name}: ponlo junto a nexus.py o define TJX_SCRIPT")
+    pr = _TJX_PROC["p"]
+    if pr is not None and pr.poll() is None:
+        return {"ok": True, "starting": True}
+    # Entorno mínimo: Jarvis X no necesita (ni debe heredar) las claves de Nexus; solo las suyas
+    keep = {"VT_API_KEY", "ABUSEIPDB_API_KEY", "OTX_API_KEY", "NVD_API_KEY"}
+    env = {k: v for k, v in os.environ.items()
+           if k in keep or k.startswith("TJX_") or not (_SECRET_NAME_RX.search(k) or k in ("ADMIN_USER", "ADMIN_PASSWORD", "JWT_SECRET"))}
+    env["NEXUS_URL"] = str(request.base_url).rstrip("/")
+    env["TJX_EMBED_ORIGINS"] = env["NEXUS_URL"] + "," + env["NEXUS_URL"].replace("127.0.0.1", "localhost")
+    try:
+        TJX_HOME.mkdir(parents=True, exist_ok=True)
+        logf = open(TJX_HOME / "jarvisx.log", "ab")
+        _TJX_PROC["p"] = subprocess.Popen(
+            [os.getenv("TJX_PYTHON") or sys.executable, str(TJX_SCRIPT), "--no-browser", "--port", str(urlparse(TJX_URL).port or 8765)],
+            cwd=str(TJX_SCRIPT.parent), env=env, stdin=subprocess.DEVNULL, stdout=logf, stderr=logf, start_new_session=True)
+    except Exception as e:
+        log.warning(f"[JARVIS X] no arranca: {type(e).__name__}: {e}")
+        raise HTTPException(status_code=500, detail=f"No se pudo arrancar: {type(e).__name__}")
+    return {"ok": True, "starting": True}
+
+@app.post("/api/jarvisx/stop")
+async def api_jarvisx_stop(user: str = Depends(require_user_or_local)):
+    """Apaga Jarvis X (libera Whisper, Piper y su servidor). Ollama lo libera por su cuenta al caducar el keep_alive."""
+    if _tjx_host_port()[0] not in LOOPBACK_HOSTS or not await asyncio.to_thread(_tjx_up):
+        return {"ok": True, "already": True}
+    try:
+        r = await HTTP.post(f"{_tjx_base()}/api/action", json={"action": "shutdown"}, headers={"X-Token": _tjx_token()}, timeout=5)
+        return {"ok": r.status_code == 200}
+    except Exception as e:
+        raise HTTPException(status_code=502, detail=f"Jarvis X no responde: {type(e).__name__}")
+
 @app.post("/api/shutdown")
 async def api_shutdown(user: str = Depends(require_user_or_local)):
     """Apaga NEXUS por completo (libera el puerto). Botón «⏻ Apagar» del menú."""
@@ -15113,11 +15322,126 @@ def _free_port(host: str, port: int) -> int:
     return port
 
 
+def _port_is_free(host: str, p: int) -> bool:
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sk:
+        sk.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            sk.bind((host, p))
+            return True
+        except OSError:
+            return False
+
+def _who_has_port(p: int) -> str:
+    """Quién ocupa el puerto (mejor esfuerzo, con `ss`). Sirve para ver si es un Nexus anterior que no se cerró."""
+    try:
+        import subprocess
+        out = subprocess.run(["ss", "-ltnp", f"sport = :{p}"], capture_output=True, text=True, timeout=3).stdout.strip().splitlines()
+        return out[-1].strip() if len(out) > 1 else ""
+    except Exception:
+        return ""
+
+def _pid_on_port(port: int) -> Optional[int]:
+    """PID del proceso que ESCUCHA en ese puerto (Linux, sin permisos especiales: lee /proc). None si no se puede saber."""
+    inodes = set()
+    for f in ("/proc/net/tcp", "/proc/net/tcp6"):
+        try:
+            lines = open(f).read().splitlines()[1:]
+        except OSError:
+            continue
+        for ln in lines:
+            c = ln.split()
+            if len(c) > 9 and c[3] == "0A" and int(c[1].rsplit(":", 1)[1], 16) == port:   # 0A = LISTEN
+                inodes.add(c[9])
+    if inodes:
+        for pid in (d for d in os.listdir("/proc") if d.isdigit()):
+            try:
+                for fd in os.listdir(f"/proc/{pid}/fd"):
+                    try:
+                        lk = os.readlink(f"/proc/{pid}/fd/{fd}")
+                    except OSError:
+                        continue
+                    if lk.startswith("socket:[") and lk[8:-1] in inodes:
+                        return int(pid)
+            except OSError:
+                continue
+    m = re.search(r"pid=(\d+)", _who_has_port(port))          # plan B: `ss`
+    return int(m.group(1)) if m else None
+
+def _is_old_nexus(pid: int) -> tuple[bool, str]:
+    """¿Es un Nexus (o un programa de esta misma carpeta) del mismo usuario? Así no se cierra nada ajeno. Devuelve (sí/no, descripción)."""
+    try:
+        cmd = open(f"/proc/{pid}/cmdline", "rb").read().replace(b"\0", b" ").decode("utf-8", "replace").strip()
+        same_user = os.stat(f"/proc/{pid}").st_uid == os.getuid()
+        try:
+            same_dir = os.path.realpath(f"/proc/{pid}/cwd") == str(Path(__file__).resolve().parent)
+        except OSError:
+            same_dir = False
+    except OSError:
+        return False, ""
+    low = cmd.lower()
+    looks_nexus = any(k in low for k in ("nexus", "dg.py", Path(__file__).name.lower(), "threat_jarvis_x"))
+    return (same_user and "python" in low and (looks_nexus or same_dir)), cmd[:140]
+
+def _take_over_port(host: str, want: int, mode: str = "1") -> bool:
+    """El puerto lo ocupa una instancia anterior: se cierra (SIGTERM; si no obedece, SIGKILL) y NEXUS se queda con el puerto.
+    mode «1» = solo Nexus/programas de esta carpeta del mismo usuario · «force» = cualquier proceso tuyo · «0» = nunca."""
+    import signal as _sg
+    if mode == "0":
+        return False
+    pid = _pid_on_port(want)
+    if not pid or pid in (os.getpid(), os.getppid()):
+        return False
+    ours, desc = _is_old_nexus(pid)
+    if not ours and mode != "force":
+        log.warning(f"[NEXUS] el puerto {want} lo tiene el proceso {pid} ({desc or 'desconocido'}) y no parece un Nexus: no lo toco.")
+        return False
+    log.warning(f"[NEXUS] el puerto {want} lo tenía una instancia anterior (pid {pid}: {desc}). La cierro y me quedo con el puerto.")
+    for sig, wait in ((_sg.SIGTERM, 9.0), (_sg.SIGKILL, 3.0)):
+        try:
+            os.kill(pid, sig)
+        except ProcessLookupError:
+            break
+        except PermissionError:
+            log.error(f"[NEXUS] sin permiso para cerrar el proceso {pid}."); return False
+        t0 = time.time()
+        while time.time() - t0 < wait:
+            if _port_is_free(host, want):
+                return True
+            time.sleep(0.25)
+    return _port_is_free(host, want)
+
+def _claim_port(host: str, want: int, strict: bool = True, wait_s: float = 10.0) -> int:
+    """NEXUS vive SIEMPRE en su puerto (8000): Jarvis X y el resto de piezas cuentan con él.
+    Si lo ocupa un Nexus anterior (el caso típico: una ejecución que se quedó abierta) lo cierra y toma el puerto.
+    Si lo ocupa otra cosa, espera unos segundos y, si sigue ocupado, para con un mensaje claro en vez de saltar a otro puerto.
+    NEXUS_PORT_TAKEOVER: 1 (por defecto) solo cierra Nexus · force = cierra cualquier proceso tuyo que lo ocupe · 0 = no cierra nada.
+    NEXUS_PORT_STRICT=0: comportamiento antiguo (usar el siguiente puerto libre)."""
+    if not strict:
+        return _free_port(host, want)
+    if _port_is_free(host, want):
+        return want
+    if _take_over_port(host, want, os.getenv("NEXUS_PORT_TAKEOVER", "1").strip().lower()):
+        return want
+    t0, warned = time.time(), False
+    while not _port_is_free(host, want):
+        if not warned:
+            log.warning(f"[NEXUS] el puerto {want} está ocupado: espero hasta {int(wait_s)} s por si se está liberando…")
+            warned = True
+        if time.time() - t0 >= wait_s:
+            who = _who_has_port(want)
+            log.error(f"[NEXUS] el puerto {want} sigue ocupado" + (f" por: {who}" if who else "") + f". NEXUS tiene que usar el {want}. "
+                      "Si es un programa tuyo que quieres cerrar: NEXUS_PORT_TAKEOVER=force en el .env (cierra ese proceso al arrancar). "
+                      "Si de verdad quieres otro puerto: NEXUS_PORT=<puerto>.")
+            raise SystemExit(1)
+        time.sleep(0.5)
+    return want
+
+
 if __name__ == "__main__":
     import uvicorn, threading
     host = os.getenv("NEXUS_HOST", "127.0.0.1")
     want = int(os.getenv("NEXUS_PORT", "8000"))
-    port = _free_port(host, want)
+    port = _claim_port(host, want, os.getenv("NEXUS_PORT_STRICT", "1") != "0")
     if port != want:
         log.warning(f"[NEXUS] el puerto {want} estaba ocupado: uso el {port}")
     log.info(f"[NEXUS] abre http://{host}:{port}")
