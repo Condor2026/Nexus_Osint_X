@@ -1,6 +1,6 @@
 
 # SPDX-License-Identifier: AGPL-3.0-only
-# Copyright (C) 2026 AlquimistaPlata
+# Copyright (C) 2026 Condor2026
 #
 # Este programa es software libre: puedes redistribuirlo y/o modificarlo bajo los términos de la
 # GNU Affero General Public License v3 publicada por la Free Software Foundation.
